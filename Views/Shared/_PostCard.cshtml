@@ -1,0 +1,60 @@
+@model friendly.Models.Post // Expecting a single Post
+
+<div class="col-md-4 mb-4"> <!-- Adjust number of columns for responsiveness -->
+    <div class="card">
+        <img src="@Model.PostImagePath" class="card-img-top" alt="@Model.Caption" style="height: 400px; object-fit: cover;" />
+        <div class="card-body">
+            <h5 class="card-title">
+                <strong>
+                    <!-- Link to the user details -->
+                    <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserId" class="text-dark">@Model.User.Username</a>
+                </strong>
+                <span> @Model.Caption</span> <!-- Display caption next to username -->
+            </h5>
+            <p class="card-text">
+                <small class="text-muted">@Model.PostDate</small> <!-- Post date below username and caption -->
+            </p>
+            <div class="mt-3 d-flex justify-content-between">
+                <a asp-action="Update" asp-route-id="@Model.PostId" class="btn btn-primary btn-sm">Update</a>
+                <a asp-action="Delete" asp-route-id="@Model.PostId" class="btn btn-danger btn-sm">Delete</a>
+            </div>
+            <div>
+                @if (Model.Comments != null && Model.Comments.Count > 0)
+                {
+                    <ul class="list-unstyled">
+                        @foreach (var comment in Model.Comments)
+                        {
+                            <li class="mb-1">
+                                <strong>
+                                    <!-- Link to the user details for the comment -->
+                                    <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" class="text-dark">@comment.User.Username</a>
+                                </strong>: <span>@comment.CommentText</span>
+                                <small class="text-muted"> (@comment.CommentDate)</small> <!-- Comment date next to comment text -->
+                                
+                                @if (comment.Threads != null && comment.Threads.Count > 0)
+                                {
+                                    <ul class="list-unstyled" style="padding-left: 22px;"> <!-- Indent threads -->
+                                        @foreach (var thread in comment.Threads)
+                                        {
+                                            <li>
+                                                <strong>
+                                                    <!-- Link to the user details for the thread -->
+                                                    <a asp-controller="User" asp-action="Details" asp-route-id="@thread.UserId" class="text-dark">@thread.User.Username</a>
+                                                </strong>: <span>@thread.ThreadText</span>
+                                                <small class="text-muted"> (@thread.ThreadDate)</small> <!-- Thread date next to thread text -->
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span><i>No comments yet</i></span>
+                }
+            </div>
+        </div>
+    </div>
+</div>

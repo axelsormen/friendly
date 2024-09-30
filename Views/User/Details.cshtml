@@ -1,0 +1,48 @@
+@model friendly.ViewModels.UsersViewModel
+
+<h3 class="my-5">User Details</h3>
+
+<div class="row gx-5">
+    <div class="col-5 text-center">
+        <!-- Profile image styling -->
+        <img alt="@Model.User?.Name" 
+             src="@Model.User?.ProfileImageUrl" 
+             class="img-fluid rounded-circle mb-3" 
+             style="width: 150px; height: 150px; object-fit: cover;" />
+             
+        <h4>@Model.User?.Username</h4> <!-- Username below the profile picture -->
+        <p><strong>Name:</strong> @Model.User?.Name</p> <!-- Name field -->
+        <p><strong>Email:</strong> @Model.User?.Email</p> <!-- Email field -->
+        <div>
+            <p>
+                <a href="/Post/Table" class="btn btn-secondary">Back to Table View</a>
+                <a href="/Post/Grid" class="btn btn-secondary">Back to Grid View</a>
+            </p>
+        </div>
+    </div>
+    
+    <div class="col-7">
+        <h4>Posts by @Model.User?.Username:</h4>
+        
+        <div class="row">
+            @if (Model.Posts != null && Model.Posts.Any())
+            {
+                foreach (var post in Model.Posts)
+                {
+                    <div class="col-md-6 mb-4"> <!-- Adjusted column size for better space utilization -->
+                        <div class="card"> <!-- Using card for post presentation -->
+                            <img src="@post.PostImagePath" class="card-img-top" alt="@post.Caption" style="height: auto; object-fit: cover;" />
+                            <div class="card-body">
+                                <p class="card-text">@post.Caption</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p><i>No posts yet</i></p>
+            }
+        </div>
+    </div>
+</div>

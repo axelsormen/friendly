@@ -1,0 +1,124 @@
+@model IEnumerable<Post>
+
+<div class="container">
+    <p>
+        <a class="btn btn-secondary" asp-controller="Post" asp-action="Create">Create New Post</a>
+    </p>
+    <table class="table table-striped">
+        @foreach (var post in Model)
+        {
+            <tr>
+                <td colspan="5">
+                    <div class="row align-items-start">
+                        <!-- Column for the image and post content -->
+                        <div class="col-md-6">
+                            <img src="@post.PostImagePath" alt="Post Image" class="img-fluid" style="height: 400px; object-fit: cover;" />
+                            
+                            <!-- Post caption and dot button row -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p>
+                                        <strong>
+                                            <a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" class="text-dark">@post.User.Username</a>
+                                        </strong>
+                                        <span> @post.Caption</span>
+                                    </p>
+                                </div>
+                                
+                                <!-- Toggle button for Edit/Delete actions (aligned to the right) -->
+                                <div>
+                                    <button type="button" class="btn" onclick="toggleActions(@post.PostId)">
+                                        <img src="~/images/dots.png" alt="Options" style="height: 24px; width: 24px;" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p>
+                                <small class="text-muted">@post.PostDate</small>
+                            </p>
+
+                            <!-- Hidden action buttons (Edit and Delete) -->
+                            <div id="actions-@post.PostId" style="display:none;" class="mt-3">
+                                <a asp-action="Update" asp-route-id="@post.PostId" class="btn btn-primary btn-sm">Edit Caption</a>
+                                <a asp-action="Delete" asp-route-id="@post.PostId" class="btn btn-danger btn-sm">Delete Post</a>
+                            </div>
+                        </div>
+
+                        <!-- Column for comments and replies -->
+                        <div class="col-md-6">
+                            <!-- Display existing comments -->
+                            <div>
+                                @if (post.Comments != null && post.Comments.Count > 0)
+                                {
+                                    <ul style="list-style-type:none; padding-left:0;">
+                                        @foreach (var comment in post.Comments)
+                                        {
+                                            <li class="mb-2">
+                                                <p>
+                                                    <strong>
+                                                        <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" class="text-dark">@comment.User.Username</a>
+                                                    </strong>
+                                                    <span>@comment.CommentText</span>
+                                                    <small class="text-muted">(@comment.CommentDate)</small>
+                                                    <!-- Reply button inline with the comment -->
+                                                    <a asp-controller="Thread" asp-action="Reply" asp-route-commentId="@comment.CommentId" class="btn btn-primary btn-sm">Reply</a>
+                                                </p>
+
+                                                <!-- Nested replies (threads) -->
+                                                @if (comment.Threads != null && comment.Threads.Count > 0)
+                                                {
+                                                    <ul style="list-style-type:none; padding-left:22px;">
+                                                        @foreach (var thread in comment.Threads)
+                                                        {
+                                                            <li>
+                                                                <strong>
+                                                                    <a asp-controller="User" asp-action="Details" asp-route-id="@thread.UserId" class="text-dark">@thread.User.Username</a>
+                                                                </strong>: 
+                                                                <span>@thread.ThreadText</span>
+                                                                <small class="text-muted"> (@thread.ThreadDate)</small>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <span><i>No comments yet</i></span>
+                                }
+                            </div>
+
+                            <!-- Comment input field for the post -->
+                            <div class="mt-3">
+                                <form asp-controller="Comment" asp-action="Create" method="post">
+                                    <input type="hidden" name="PostId" value="@post.PostId" />
+                                    <textarea class="form-control" name="CommentText" rows="2" placeholder="Write a comment..."></textarea>
+                                    <div class="d-flex justify-content-end mt-2">
+                                        <button type="submit" class="btn btn-secondary btn-sm">Post Comment</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" style="height:20px;"></td>
+            </tr>
+        }
+    </table>
+</div>
+
+<!-- JavaScript to handle toggle of Edit/Delete buttons -->
+<script>
+    function toggleActions(postId) {
+        var actions = document.getElementById("actions-" + postId);
+        if (actions.style.display === "none") {
+            actions.style.display = "block";
+        } else {
+            actions.style.display = "none";
+        }
+    }
+</script>

@@ -1,0 +1,30 @@
+@model IEnumerable<User>
+
+<div class="container">
+    <table class='table table-striped'>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>ProfileImageUrl</th>
+            <th>Posts</th>
+        </tr>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserId</td>
+                <td>@user.Name</td>
+                <td>@user.Username</td>
+                <td>@user.ProfileImageUrl</td>
+                <td>
+                    @if (@user.Posts != null)
+                    {
+                        <p>@string.Join(", ", @user.Posts.Select(post => $"Post{post.PostId}"))</p>
+                    }
+                </td>
+                <td></td>
+            </tr>
+        }
+    </table>
+</div>

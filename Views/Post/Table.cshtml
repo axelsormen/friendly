@@ -1,0 +1,6 @@
+@model friendly.ViewModels.PostsViewModel // Ensure this is correct for both Table and Grid views
+
+<h1>Posts (@Model.CurrentViewName View)</h1>
+<a href="/Post/Grid" class="btn btn-primary">Grid View</a>
+
+<partial name="_PostTable" model="Model.Posts" />
