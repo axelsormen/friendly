@@ -5,43 +5,87 @@ namespace friendly.DAL
 {
     public class CommentRepository : ICommentRepository
     {
-        private readonly PostDbContext _context;
+        private readonly PostDbContext _db;
+        private readonly ILogger<CommentRepository> _logger;
 
-        public CommentRepository(PostDbContext context)
+     public CommentRepository(PostDbContext db, ILogger<CommentRepository> logger)
         {
-            _context = context;
+            _db = db;
+            _logger = logger;
+        }
+          public async Task<IEnumerable<Comment>?> GetAll()
+        {
+            try
+            {
+                return await _db.Comments.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("[CommentRepository] comments ToListAsync() failed when GetAll(), error message: {e}", e.Message);
+                return null;
+            }
         }
 
-        public async Task<IEnumerable<Comment>> GetAll()
+    public async Task<Comment?> GetCommentById(int id)
+    {
+        try{
+            return await _db.Comments.FindAsync(id);
+        }
+        catch (Exception e)
         {
-            return await _context.Comments.ToListAsync();
+            _logger.LogError("[CommentRepository] comment FindAsync(id) failed when GetCommentById for CommentId {CommentId:0000}, error message: {e}", id, e.Message);
+            return null;
+        }
+    }
+
+         public async Task<bool> Create(Comment comment)
+        {
+            try{
+                _db.Comments.Add(comment);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("[CommentRepository] comment creation failed for comment {@comment}, error message: {e}", comment, e.Message);
+                return false;
+            }        
         }
 
-        public async Task<Comment?> GetCommentById(int id)
+        public async Task<bool> Update(Comment comment)
         {
-            return await _context.Comments.FindAsync(id);
+            try{
+                _db.Comments.Update(comment);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError("[CommentRepository] comment FindAsync(id) failed when updating the CommentId {CommentId:0000}, error message {e}", comment, e.Message);
+                return false;
+            }
         }
 
-        public async Task Create(Comment comment)
+ public async Task<bool> Delete(int id)
         {
-            await _context.Comments.AddAsync(comment);
-            await _context.SaveChangesAsync();
-        }
+            try
+            {
+                var comment = await _db.Comments.FindAsync(id);
+                if(comment == null)
+                {
+                    _logger.LogError("[CommentRepository] comment not found for the CommentId {CommentId:0000}", id);
+                    return false;
+                }
 
-        public async Task Update(Comment comment)
-        {
-            _context.Comments.Update(comment);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<bool> Delete(int id)
-        {
-            var comment = await _context.Comments.FindAsync(id);
-            if (comment == null) return false;
-
-            _context.Comments.Remove(comment);
-            await _context.SaveChangesAsync();
-            return true;
+                _db.Comments.Remove(comment);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError("[CommentRepository] comment deletion failed for the CommentId {CommentId:0000}, error message: {e}", id, e.Message);
+                return false;
+            }
         }
     }
 }

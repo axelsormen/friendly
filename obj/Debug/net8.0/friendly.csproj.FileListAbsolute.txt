@@ -24,6 +24,9 @@
 /Users/axel/Documents/Skole/friendly/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Sqlite.dll
 /Users/axel/Documents/Skole/friendly/bin/Debug/net8.0/Microsoft.Extensions.DependencyModel.dll
 /Users/axel/Documents/Skole/friendly/bin/Debug/net8.0/Mono.TextTemplating.dll
+/Users/axel/Documents/Skole/friendly/bin/Debug/net8.0/Serilog.dll
+/Users/axel/Documents/Skole/friendly/bin/Debug/net8.0/Serilog.Extensions.Logging.dll
+/Users/axel/Documents/Skole/friendly/bin/Debug/net8.0/Serilog.Sinks.File.dll
 /Users/axel/Documents/Skole/friendly/bin/Debug/net8.0/SQLitePCLRaw.batteries_v2.dll
 /Users/axel/Documents/Skole/friendly/bin/Debug/net8.0/SQLitePCLRaw.core.dll
 /Users/axel/Documents/Skole/friendly/bin/Debug/net8.0/SQLitePCLRaw.provider.e_sqlite3.dll
@@ -113,6 +116,7 @@
 /Users/axel/Documents/Skole/friendly/obj/Debug/net8.0/friendly.MvcApplicationPartsAssemblyInfo.cache
 /Users/axel/Documents/Skole/friendly/obj/Debug/net8.0/friendly.RazorAssemblyInfo.cache
 /Users/axel/Documents/Skole/friendly/obj/Debug/net8.0/friendly.RazorAssemblyInfo.cs
+/Users/axel/Documents/Skole/friendly/obj/Debug/net8.0/friendly.sourcelink.json
 /Users/axel/Documents/Skole/friendly/obj/Debug/net8.0/staticwebassets.build.json
 /Users/axel/Documents/Skole/friendly/obj/Debug/net8.0/staticwebassets.development.json
 /Users/axel/Documents/Skole/friendly/obj/Debug/net8.0/staticwebassets/msbuild.friendly.Microsoft.AspNetCore.StaticWebAssets.props

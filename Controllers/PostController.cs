@@ -20,6 +20,11 @@ public class PostController : Controller
 public async Task<IActionResult> Table()
 {
     var posts = await _postRepository.GetAll();
+    if(posts == null)
+    {
+        _logger.LogError("[PostController] Post list not found while executing _postRepository.GetAll()");
+        return NotFound("Post list not found");
+    } 
     var postsViewModel = new PostsViewModel(posts, "Table");
     return View(postsViewModel);
 }
@@ -27,8 +32,13 @@ public async Task<IActionResult> Table()
 public async Task<IActionResult> Grid()
 {
     var posts = await _postRepository.GetAll();
+    if(posts == null)
+    {
+        _logger.LogError("[PostController] Post list not found while executing _postRepository.GetAll()");
+        return NotFound("Post list not found");
+    }
     var postsViewModel = new PostsViewModel(posts, "Grid");
-    return View(postsViewModel); // Make sure you're passing PostsViewModel
+    return View(postsViewModel); 
 }
     
     [HttpGet]
@@ -37,67 +47,47 @@ public async Task<IActionResult> Grid()
         return View();
     }
 
-[HttpPost]
-public async Task<IActionResult> Create(Post post, IFormFile imageFile)
-{
-    _logger.LogInformation("Create action called with Post data: {@Post}", post);
-
-    // Handle the image file
-    if (imageFile != null && imageFile.Length > 0)
+    [HttpPost]
+    public async Task<IActionResult> Create(Post post, IFormFile imageFile)
     {
-        var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
 
-        if (!Directory.Exists(uploadsDir))
+        if (imageFile != null && imageFile.Length > 0)
         {
-            Directory.CreateDirectory(uploadsDir);
+            var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+
+            if (!Directory.Exists(uploadsDir))
+            {
+                Directory.CreateDirectory(uploadsDir);
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
+            var filePath = Path.Combine(uploadsDir, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
+
+            // Assign the file path to PostImagePath
+            post.PostImagePath = $"/uploads/{uniqueFileName}";
+        }
+        else
+        {
+            ModelState.AddModelError("PostImagePath", "An image file is required.");
         }
 
-        var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(imageFile.FileName);
-        var filePath = Path.Combine(uploadsDir, uniqueFileName);
+        // Set the post date
+        post.PostDate = DateTime.Now.ToString();  
 
-        // Save the file
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        if (ModelState.IsValid)
         {
-            await imageFile.CopyToAsync(stream);
+            bool returnOk = await _postRepository.Create(post);
+            if(returnOk)
+                return RedirectToAction(nameof(Table));
         }
-
-        // Assign the file path to PostImagePath
-        post.PostImagePath = $"/uploads/{uniqueFileName}";
+        _logger.LogWarning("[PostController] Post creation failed {@post}", post);
+        return View(post);
     }
-    else
-    {
-        ModelState.AddModelError("PostImagePath", "An image file is required.");
-    }
-
-    // Set the post date
-    post.PostDate = DateTime.Now.ToString();  
-
-    // Validate the model after all fields are properly set
-    if (ModelState.IsValid)
-    {
-        try
-        {
-            await _postRepository.Create(post);
-            _logger.LogInformation("Post created successfully with ID: {PostId}", post.PostId);
-            return RedirectToAction(nameof(Table));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while creating the post.");
-        }
-    }
-
-    // Log validation errors
-    foreach (var state in ModelState)
-    {
-        foreach (var error in state.Value.Errors)
-        {
-            _logger.LogWarning("Validation error on field {Field}: {ErrorMessage}", state.Key, error.ErrorMessage);
-        }
-    }
-
-    return View(post);  // Return the view with validation errors
-}
 
     [HttpGet]
     public async Task<IActionResult> Update(int id)
@@ -105,54 +95,27 @@ public async Task<IActionResult> Create(Post post, IFormFile imageFile)
         var post = await _postRepository.GetPostById(id);
         if (post == null)
         {
-            return NotFound();
+            _logger.LogError("[PostController] Post not found when updating the PostId {PostId:0000}", id);
+            return BadRequest("Post not found for the PostId");
         }
         return View(post);
     }
 
-[HttpPost]
-public async Task<IActionResult> Update(Post post)
-{
-    // Log that the Update action has been called
-    _logger.LogInformation("Update action called with Post data: {@Post}", post);
-
-    if (ModelState.IsValid)
+    [HttpPost]
+    public async Task<IActionResult> Update(Post post)
     {
-        try
+        if (ModelState.IsValid)
         {
-            // Retrieve the original post from the database
             var originalPost = await _postRepository.GetPostById(post.PostId);
-            if (originalPost == null)
-            {
-                return NotFound();  // Return not found if the post doesn't exist
+            originalPost.Caption = post.Caption;
+
+            bool returnOk = await _postRepository.Update(originalPost);
+            if(returnOk)
+                return RedirectToAction(nameof(Table));
             }
-
-            // Preserve unchanged properties
-            originalPost.Caption = post.Caption; // Only update the Caption
-
-            // Log before updating the post
-            _logger.LogInformation("Model is valid, updating post...");
-
-            // Update the post in the repository
-            await _postRepository.Update(originalPost);  // Update with the original post object
-
-            // Log successful post update
-            _logger.LogInformation("Post updated successfully with ID: {PostId}", post.PostId);
-
-            return RedirectToAction(nameof(Table));
-        }
-        catch (Exception ex)
-        {
-            // Log any exception that occurs
-            _logger.LogError(ex, "An error occurred while updating the post.");
-            return View(post);
-        }
+        _logger.LogWarning("[PostController] Post update failed {@post}", post);
+        return View(post);
     }
-
-    // Log validation errors if ModelState is invalid
-    _logger.LogWarning("ModelState is invalid. Errors: {@Errors}", ModelState.Values.SelectMany(v => v.Errors));
-    return View(post);
-}
 
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
@@ -160,7 +123,8 @@ public async Task<IActionResult> Update(Post post)
         var post = await _postRepository.GetPostById(id);
         if (post == null)
         {
-            return NotFound();
+            _logger.LogError("[PostController] Post not found for the PostId {PostId:0000}", id);
+            return BadRequest("Post not found for the PostId");
         }
         return View(post);
     }
@@ -168,7 +132,12 @@ public async Task<IActionResult> Update(Post post)
     [HttpPost]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        await _postRepository.Delete(id);
+        bool returnOk = await _postRepository.Delete(id);
+        if(!returnOk)
+        {
+            _logger.LogError("[PostController] Post deletion failed for the PostId {PostId:0000}", id);
+            return BadRequest("Post deletion failed");
+        }
         return RedirectToAction(nameof(Table));
     }
 }
