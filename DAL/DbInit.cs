@@ -65,17 +65,6 @@ namespace friendly.Models
             {
                 comments = context.Comments.ToList();  // Fetch existing comments if already present
             }
-
-            if (!context.Threads.Any())
-            {
-                var threads = new List<Thread>
-                {
-                    new Thread { ThreadText = "Ja, det er koselig", ThreadDate = DateTime.Now.ToString(), CommentId = comments[0].CommentId, UserId = users[1].UserId },
-                    new Thread { ThreadText = "Det ser ikke så koselig ut...", ThreadDate = DateTime.Now.ToString(), CommentId = comments[0].CommentId, UserId = users[2].UserId },
-                };
-                context.Threads.AddRange(threads);
-                context.SaveChanges();
-            }
         }
     }
 }

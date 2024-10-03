@@ -1,5 +1,4 @@
-@model friendly.Models.Post // Expecting a single Post
-
+@model friendly.Models.Post
 <div class="col-md-4 mb-4"> <!-- Adjust number of columns for responsiveness -->
     <div class="card">
         <img src="@Model.PostImagePath" class="card-img-top" alt="@Model.Caption" style="height: 400px; object-fit: cover;" />
@@ -30,22 +29,6 @@
                                     <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" class="text-dark">@comment.User.Username</a>
                                 </strong>: <span>@comment.CommentText</span>
                                 <small class="text-muted"> (@comment.CommentDate)</small> <!-- Comment date next to comment text -->
-                                
-                                @if (comment.Threads != null && comment.Threads.Count > 0)
-                                {
-                                    <ul class="list-unstyled" style="padding-left: 22px;"> <!-- Indent threads -->
-                                        @foreach (var thread in comment.Threads)
-                                        {
-                                            <li>
-                                                <strong>
-                                                    <!-- Link to the user details for the thread -->
-                                                    <a asp-controller="User" asp-action="Details" asp-route-id="@thread.UserId" class="text-dark">@thread.User.Username</a>
-                                                </strong>: <span>@thread.ThreadText</span>
-                                                <small class="text-muted"> (@thread.ThreadDate)</small> <!-- Thread date next to thread text -->
-                                            </li>
-                                        }
-                                    </ul>
-                                }
                             </li>
                         }
                     </ul>

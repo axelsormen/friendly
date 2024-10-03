@@ -21,8 +21,5 @@ namespace friendly.Models
         public virtual Post Post { get; set; }
 
         public int PostId { get; set; }
-
-        [ValidateNever]
-        public virtual List<Thread> Threads { get; set; }
     }
 }

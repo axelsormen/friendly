@@ -60,26 +60,7 @@
                                                     </strong>
                                                     <span>@comment.CommentText</span>
                                                     <small class="text-muted">(@comment.CommentDate)</small>
-                                                    <!-- Reply button inline with the comment -->
-                                                    <a asp-controller="Thread" asp-action="Reply" asp-route-commentId="@comment.CommentId" class="btn btn-primary btn-sm">Reply</a>
                                                 </p>
-
-                                                <!-- Nested replies (threads) -->
-                                                @if (comment.Threads != null && comment.Threads.Count > 0)
-                                                {
-                                                    <ul style="list-style-type:none; padding-left:22px;">
-                                                        @foreach (var thread in comment.Threads)
-                                                        {
-                                                            <li>
-                                                                <strong>
-                                                                    <a asp-controller="User" asp-action="Details" asp-route-id="@thread.UserId" class="text-dark">@thread.User.Username</a>
-                                                                </strong>: 
-                                                                <span>@thread.ThreadText</span>
-                                                                <small class="text-muted"> (@thread.ThreadDate)</small>
-                                                            </li>
-                                                        }
-                                                    </ul>
-                                                }
                                             </li>
                                         }
                                     </ul>
