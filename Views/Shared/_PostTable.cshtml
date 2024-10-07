@@ -17,7 +17,7 @@
                             <!-- Post caption and dot button row -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center mb-3">
-                                    @if (!string.IsNullOrEmpty(post.User.ProfileImageUrl))
+                                @if (post.User != null && !string.IsNullOrEmpty(post.User.ProfileImageUrl))
                                     {
                                     <img alt="@post.User.UserName" 
                                         src="@post.User.ProfileImageUrl" 
@@ -36,7 +36,7 @@
                                                     @post.User.UserName
                                                 </a>
                                             </strong>
-                                            <span class="text-muted" style="font-size: 0.9rem; margin-left: 5px;">@post.Caption</span>
+                                            <span class="text-muted" style="margin-left: 5px;">@post.Caption</span>
                                         </div>
                                     </div>
                                 
@@ -71,7 +71,10 @@
                                             <li class="mb-2">
                                                 <p>
                                                     <strong>
-                                                        <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" class="text-dark">@comment.User.UserName</a>
+                                                        <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" 
+                                                            class="text-dark" style="text-decoration: none;">
+                                                            @comment.User.UserName
+                                                        </a>                                                    
                                                     </strong>
                                                     <span>@comment.CommentText</span>
                                                     <small class="text-muted">(@comment.CommentDate)</small>

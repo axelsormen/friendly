@@ -4,18 +4,20 @@ using friendly.Models;
 using friendly.ViewModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.AspNetCore.Identity;
 namespace friendly.Controllers;
 
 public class CommentController : Controller
 {
     private readonly ICommentRepository _commentRepository;
     private readonly ILogger<CommentController> _logger;
+    private readonly UserManager<User> _userManager;  // Add UserManager to access user data
 
-    public CommentController(ICommentRepository commentRepository, ILogger<CommentController> logger)
+    public CommentController(ICommentRepository commentRepository, ILogger<CommentController> logger, UserManager<User> userManager)
     {
         _commentRepository = commentRepository;
         _logger = logger;
+        _userManager = userManager;  // Initialize UserManager
     }
     
     [HttpGet]
@@ -27,10 +29,20 @@ public class CommentController : Controller
 
     [HttpPost]
     [Authorize]
+  
     public async Task<IActionResult> Create(Comment comment)
     {
         _logger.LogInformation("Create action called with Comment data: {@Comment}", comment);
 
+        // Ensure the UserId and PostId are set
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            _logger.LogError("User not found.");
+            return Unauthorized();
+        }
+
+        comment.UserId = user.Id; // Set the UserId
         comment.CommentDate = DateTime.Now.ToString();
 
         if (ModelState.IsValid)
@@ -59,7 +71,6 @@ public class CommentController : Controller
 
         return View(comment);
     }
-
 
     [HttpGet]
     [Authorize]

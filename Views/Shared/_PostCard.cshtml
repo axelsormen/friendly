@@ -28,7 +28,7 @@
                             @Model.User.UserName
                         </a>
                     </strong>
-                    <span class="text-muted" style="font-size: 0.9rem; margin-left: 5px;">@Model.Caption</span>
+                    <span class="text-muted" style="margin-left: 5px;">@Model.Caption</span>
                 </div>
 
                 <!-- Dots Button for Options -->
@@ -64,7 +64,8 @@
                                        class="text-dark" style="text-decoration: none;">
                                        @comment.User.UserName
                                     </a>
-                                </strong>: <span>@comment.CommentText</span>
+                                </strong>
+                                <span>@comment.CommentText</span>
                                 <small class="text-muted"> (@comment.CommentDate)</small>
                             </li>
                         }

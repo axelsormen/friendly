@@ -48,7 +48,7 @@ namespace friendly.Models
                         UserName = "kvammy",
                         Email = "kvamsy@gmail.com",
                         ProfileImageUrl = "/uploads/profile-images/profileimage2.jpg",
-                        PhoneNumber = "18811881",
+                        PhoneNumber = "+47 18811881",
                         EmailConfirmed = false,
                     },
                     new User

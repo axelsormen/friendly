@@ -63,6 +63,7 @@ namespace friendly.Areas.Identity.Pages.Account.Manage
             FirstName = user.FirstName;
             LastName = user.LastName;
             ProfileImageUrl = user.ProfileImageUrl;
+            Posts = user.Posts;
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 

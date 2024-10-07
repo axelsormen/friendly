@@ -3,7 +3,7 @@
 <h3 class="my-5">User Details</h3>
 
 <div class="row gx-5">
-    <div class="col-5 text-center">
+    <div class="col-4 text-center">
         @if (!string.IsNullOrEmpty(Model.User?.ProfileImageUrl))
                 {
                     <img alt="@Model.User?.UserName profile image" 
@@ -51,9 +51,7 @@
         </div>
     </div>
     
-    <div class="col-7">
-        <h4>Posts by @Model.User?.UserName:</h4>
-        
+    <div class="col-8">        
         <div class="row">
             @if (Model.Posts != null && Model.Posts.Any())
             {
@@ -64,6 +62,7 @@
                             <img src="@post.PostImagePath" class="card-img-top" alt="@post.Caption" style="height: auto; object-fit: cover;" />
                             <div class="card-body">
                                 <p class="card-text">@post.Caption</p>
+                                <p><small class="text-muted">@post.PostDate</small></p>
                             </div>
                         </div>
                     </div>
