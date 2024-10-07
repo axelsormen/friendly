@@ -1,5 +1,5 @@
-@model IEnumerable<User>
+@model friendly.ViewModels.UsersViewModel // Change to use UsersViewModel
 
-<h1>List of Users</h1>
+<h1>User List</h1>
 
-<partial name="="_UserTable" model="Model" />
+<partial name="_UserTable" model="Model.Users" /> <!-- Pass the Users property from the view model -->

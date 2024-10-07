@@ -1,4 +1,4 @@
-@model IEnumerable<Post>
+@using friendly.Models
 
 <div class="container">
     <p>
@@ -16,14 +16,29 @@
                             
                             <!-- Post caption and dot button row -->
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <p>
-                                        <strong>
-                                            <a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" class="text-dark">@post.User.Username</a>
-                                        </strong>
-                                        <span> @post.Caption</span>
-                                    </p>
-                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    @if (!string.IsNullOrEmpty(post.User.ProfileImageUrl))
+                                    {
+                                    <img alt="@post.User.UserName" 
+                                        src="@post.User.ProfileImageUrl" 
+                                        class="img-fluid rounded-circle" 
+                                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />                        }
+                                    else
+                                    {
+                                    <img alt="No Profile Image" 
+                                        src="/uploads/profile-images/defaultprofileimage.jpg" 
+                                        class="img-fluid rounded-circle" 
+                                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
+                                    }
+                                        <div>
+                                            <strong>
+                                                <a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" class="text-dark" style="text-decoration: none; font-size: 1.1rem;">
+                                                    @post.User.UserName
+                                                </a>
+                                            </strong>
+                                            <span class="text-muted" style="font-size: 0.9rem; margin-left: 5px;">@post.Caption</span>
+                                        </div>
+                                    </div>
                                 
                                 <!-- Toggle button for Edit/Delete actions (aligned to the right) -->
                                 <div>
@@ -56,7 +71,7 @@
                                             <li class="mb-2">
                                                 <p>
                                                     <strong>
-                                                        <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" class="text-dark">@comment.User.Username</a>
+                                                        <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" class="text-dark">@comment.User.UserName</a>
                                                     </strong>
                                                     <span>@comment.CommentText</span>
                                                     <small class="text-muted">(@comment.CommentDate)</small>

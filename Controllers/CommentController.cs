@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using friendly.DAL;
 using friendly.Models;
 using friendly.ViewModels;
-using Microsoft.Extensions.Logging; // Add this for ILogger
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace friendly.Controllers;
 
@@ -18,12 +19,14 @@ public class CommentController : Controller
     }
     
     [HttpGet]
+    [Authorize]
     public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create(Comment comment)
     {
         _logger.LogInformation("Create action called with Comment data: {@Comment}", comment);
@@ -59,6 +62,7 @@ public class CommentController : Controller
 
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Update(int id)
     {
         var comment = await _commentRepository.GetCommentById(id);
@@ -71,6 +75,7 @@ public class CommentController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Update(Comment comment)
     {
         if (ModelState.IsValid)
@@ -87,6 +92,7 @@ public class CommentController : Controller
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         var comment = await _commentRepository.GetCommentById(id);
@@ -99,6 +105,7 @@ public class CommentController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         bool returnOk = await _commentRepository.Delete(id);

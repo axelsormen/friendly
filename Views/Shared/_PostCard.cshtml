@@ -1,23 +1,57 @@
 @model friendly.Models.Post
+
 <div class="col-md-4 mb-4"> <!-- Adjust number of columns for responsiveness -->
     <div class="card">
+        <!-- Post Image -->
         <img src="@Model.PostImagePath" class="card-img-top" alt="@Model.Caption" style="height: 400px; object-fit: cover;" />
+
+        <!-- Card Body -->
         <div class="card-body">
-            <h5 class="card-title">
-                <strong>
-                    <!-- Link to the user details -->
-                    <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserId" class="text-dark">@Model.User.Username</a>
-                </strong>
-                <span> @Model.Caption</span> <!-- Display caption next to username -->
-            </h5>
-            <p class="card-text">
-                <small class="text-muted">@Model.PostDate</small> <!-- Post date below username and caption -->
-            </p>
-            <div class="mt-3 d-flex justify-content-between">
-                <a asp-action="Update" asp-route-id="@Model.PostId" class="btn btn-primary btn-sm">Update</a>
-                <a asp-action="Delete" asp-route-id="@Model.PostId" class="btn btn-danger btn-sm">Delete</a>
+            <!-- User Profile, Caption, and Options Button -->
+            <div class="d-flex align-items-center mb-3">
+                 @if (!string.IsNullOrEmpty(Model.User.ProfileImageUrl))
+                    {
+                    <img alt="@Model.User.UserName" 
+                        src="@Model.User.ProfileImageUrl" 
+                        class="img-fluid rounded-circle" 
+                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />                        }
+                    else
+                    {
+                    <img alt="No Profile Image" 
+                        src="/uploads/profile-images/defaultprofileimage.jpg" 
+                        class="img-fluid rounded-circle" 
+                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
+                    }
+               <div>
+                    <strong>
+                        <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserId" class="text-dark" style="text-decoration: none; font-size: 1.1rem;">
+                            @Model.User.UserName
+                        </a>
+                    </strong>
+                    <span class="text-muted" style="font-size: 0.9rem; margin-left: 5px;">@Model.Caption</span>
+                </div>
+
+                <!-- Dots Button for Options -->
+                <div class="ml-auto">
+                    <button type="button" class="btn" onclick="toggleActions(@Model.PostId)">
+                        <img src="~/images/dots.png" alt="Options" style="height: 24px; width: 24px;" />
+                    </button>
+                </div>
             </div>
-            <div>
+
+            <!-- Post Date -->
+            <p class="card-text">
+                <small class="text-muted">@Model.PostDate</small>
+            </p>
+
+            <!-- Hidden Action Buttons (Edit and Delete) -->
+            <div id="actions-@Model.PostId" style="display:none;" class="mt-3 d-flex justify-content-between">
+                <a asp-action="Update" asp-route-id="@Model.PostId" class="btn btn-primary btn-sm">Edit Caption</a>
+                <a asp-action="Delete" asp-route-id="@Model.PostId" class="btn btn-danger btn-sm">Delete Post</a>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="mt-3">
                 @if (Model.Comments != null && Model.Comments.Count > 0)
                 {
                     <ul class="list-unstyled">
@@ -25,10 +59,13 @@
                         {
                             <li class="mb-1">
                                 <strong>
-                                    <!-- Link to the user details for the comment -->
-                                    <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" class="text-dark">@comment.User.Username</a>
+                                    <!-- Link to the user details for the comment, without underline -->
+                                    <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" 
+                                       class="text-dark" style="text-decoration: none;">
+                                       @comment.User.UserName
+                                    </a>
                                 </strong>: <span>@comment.CommentText</span>
-                                <small class="text-muted"> (@comment.CommentDate)</small> <!-- Comment date next to comment text -->
+                                <small class="text-muted"> (@comment.CommentDate)</small>
                             </li>
                         }
                     </ul>
@@ -41,3 +78,15 @@
         </div>
     </div>
 </div>
+
+<!-- JavaScript to handle toggle of Edit/Delete buttons -->
+<script>
+    function toggleActions(postId) {
+        var actions = document.getElementById("actions-" + postId);
+        if (actions.style.display === "none") {
+            actions.style.display = "block";
+        } else {
+            actions.style.display = "none";
+        }
+    }
+</script>

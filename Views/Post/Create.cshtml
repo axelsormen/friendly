@@ -10,19 +10,11 @@
         <input type="file" name="imageFile" class="form-control" />  <!-- File input for image -->
         <span asp-validation-for="PostImagePath" class="text-danger"></span> <!-- For validation -->
     </div>
-    
     <div class="form-group">
         <label asp-for="Caption"></label><span class="text-danger">*</span>
         <input asp-for="Caption" class="form-control" />
         <span asp-validation-for="Caption" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="UserId">User ID</label>
-        <input asp-for="UserId" class="form-control" />
-        <span asp-validation-for="UserId" class="text-danger"></span>
-    </div>
-    
+    </div>    
     <button type="submit" class="btn btn-primary">Create</button>
     <a asp-action="Table" class="btn btn-secondary">Back to Table View</a>
 </form>

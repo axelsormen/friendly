@@ -4,15 +4,45 @@
 
 <div class="row gx-5">
     <div class="col-5 text-center">
-        <!-- Profile image styling -->
-        <img alt="@Model.User?.Name" 
-             src="@Model.User?.ProfileImageUrl" 
-             class="img-fluid rounded-circle mb-3" 
-             style="width: 150px; height: 150px; object-fit: cover;" />
-             
-        <h4>@Model.User?.Username</h4> <!-- Username below the profile picture -->
-        <p><strong>Name:</strong> @Model.User?.Name</p> <!-- Name field -->
+        @if (!string.IsNullOrEmpty(Model.User?.ProfileImageUrl))
+                {
+                    <img alt="@Model.User?.UserName profile image" 
+                        src="@Model.User?.ProfileImageUrl" 
+                        class="img-fluid rounded-circle mb-3" 
+                        style="width: 200px; height: 200px; object-fit: cover;" />
+                }
+                else
+                {
+                    <img alt="No Profile Image" 
+                        src="/uploads/profile-images/defaultprofileimage.jpg" 
+                        class="img-fluid rounded-circle mb-3" 
+                        style="width: 200px; height: 200px; object-fit: cover;" />
+                } 
+        <h4>@Model.User?.UserName</h4> <!-- Username below the profile picture -->
+        <p><strong>Name: </strong>@if (!string.IsNullOrEmpty(Model.User?.FirstName) && !string.IsNullOrEmpty(Model.User?.LastName))
+                        {
+                            @Model.User?.FirstName @Model.User?.LastName
+                        }
+                        else if(!string.IsNullOrEmpty(Model.User?.FirstName))
+                        {
+                            @Model.User?.FirstName
+                        }
+                        else if(!string.IsNullOrEmpty(Model.User?.LastName))
+                        {
+                            @Model.User?.LastName
+                        }
+                        else
+                        {
+                            <i>Unknown</i>
+                        } </p> <!-- Name field -->
         <p><strong>Email:</strong> @Model.User?.Email</p> <!-- Email field -->
+        @if (Model.User?.PhoneNumber != null)
+        {
+            <p><strong>Phone Number:</strong> @Model.User?.PhoneNumber</p> <!-- Phone number field -->
+        }
+        else{
+            <p><strong>Phone Number:</strong><i> Missing</i></p> <!-- Phone number field -->
+        }
         <div>
             <p>
                 <a href="/Post/Table" class="btn btn-secondary">Back to Table View</a>
@@ -22,7 +52,7 @@
     </div>
     
     <div class="col-7">
-        <h4>Posts by @Model.User?.Username:</h4>
+        <h4>Posts by @Model.User?.UserName:</h4>
         
         <div class="row">
             @if (Model.Posts != null && Model.Posts.Any())
