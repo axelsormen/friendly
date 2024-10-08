@@ -76,15 +76,16 @@ namespace friendly.Models
             // Get users from the database
             var axel = await userManager.FindByEmailAsync("axelsormen@gmail.com");
             var kristoffer = await userManager.FindByEmailAsync("kvamsy@gmail.com");
+            var jesper = await userManager.FindByEmailAsync("jeppe@hotmail.com");
 
             // Seed posts
             if (!context.Posts.Any())
             {
                 var posts = new List<Post>
                 {
-                    new Post { PostImagePath = "/uploads/mountains.jpg", Caption = "Koser meg på fjelltur", PostDate = DateTime.Now.ToString(), UserId = axel.Id },
-                    new Post { PostImagePath = "/uploads/fall.jpg", Caption = "Høsten er nydelig", PostDate = DateTime.Now.ToString(), UserId = kristoffer.Id },
-                    new Post { PostImagePath = "/uploads/beach.jpg", Caption = "Stranda på denne tiden av døgnet er magisk", PostDate = DateTime.Now.ToString(), UserId = axel.Id }
+                    new Post { PostImagePath = "/uploads/mountains.jpg", Caption = "Enjoying the mountains", PostDate = DateTime.Now.ToString(), UserId = axel.Id },
+                    new Post { PostImagePath = "/uploads/fall.jpg", Caption = "Autumn is beautiful", PostDate = DateTime.Now.ToString(), UserId = kristoffer.Id },
+                    new Post { PostImagePath = "/uploads/beach.jpg", Caption = "Loving the beach!", PostDate = DateTime.Now.ToString(), UserId = axel.Id }
                 };
 
                 context.Posts.AddRange(posts);
@@ -98,9 +99,9 @@ namespace friendly.Models
             {
                 var comments = new List<Comment>
                 {
-                    new Comment { CommentText = "Ser koselig ut!", CommentDate = DateTime.Now.ToString(), PostId = allPosts[1].PostId, UserId = axel.Id },
-                    new Comment { CommentText = "Flott!", CommentDate = DateTime.Now.ToString(), PostId = allPosts[0].PostId, UserId = kristoffer.Id },
-                    new Comment { CommentText = "Du er en rå fotograf!", CommentDate = DateTime.Now.ToString(), PostId = allPosts[1].PostId, UserId = kristoffer.Id }
+                    new Comment { CommentText = "Awesome!", CommentDate = DateTime.Now.ToString(), PostId = allPosts[1].PostId, UserId = axel.Id },
+                    new Comment { CommentText = "Beautiful, wow!", CommentDate = DateTime.Now.ToString(), PostId = allPosts[0].PostId, UserId = kristoffer.Id },
+                    new Comment { CommentText = "You are such a great photographer", CommentDate = DateTime.Now.ToString(), PostId = allPosts[1].PostId, UserId = jesper.Id }
                 };
 
                 context.Comments.AddRange(comments);

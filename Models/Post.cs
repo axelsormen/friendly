@@ -12,6 +12,7 @@ namespace friendly.Models
         [ValidateNever]
         public string? PostImagePath { get; set; }  // Store the image file path
 
+        [Required]
         [StringLength(200)] 
         public string? Caption { get; set; }
 

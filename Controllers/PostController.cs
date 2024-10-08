@@ -76,6 +76,17 @@ public class PostController : Controller
         {
             _logger.LogInformation("[PostController] Image file received: {FileName}", imageFile.FileName);
 
+            // Validate the file extension
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(imageFile.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                _logger.LogWarning("[PostController] Invalid file extension: {FileExtension}", fileExtension);
+                ModelState.AddModelError("PostImagePath", "Only .jpg, .jpeg, and .png image formats are allowed.");
+                return View(post);
+            }
+
             var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
 
             if (!Directory.Exists(uploadsDir))

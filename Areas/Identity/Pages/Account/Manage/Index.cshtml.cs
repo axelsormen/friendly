@@ -87,85 +87,95 @@ namespace friendly.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(IFormFile ProfileImageFile)
+    public async Task<IActionResult> OnPostAsync(IFormFile ProfileImageFile)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
+            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+        }
 
-            if (!ModelState.IsValid)
+        if (!ModelState.IsValid)
+        {
+            await LoadAsync(user);
+            return Page();
+        }
+
+        // Handle profile image upload
+        if (ProfileImageFile != null && ProfileImageFile.Length > 0)
+        {
+            // Check the file extension
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(ProfileImageFile.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(fileExtension))
             {
-                await LoadAsync(user);
+                // Add a model state error for invalid file extension
+                ModelState.AddModelError("ProfileImageFile", "Only .jpg, .jpeg, and .png files are allowed.");
+                StatusMessage = "Only .jpg, .jpeg, and .png files are allowed.";
+                await LoadAsync(user); // Load user data before returning the page
                 return Page();
             }
 
-            // Handle profile image upload
-            if (ProfileImageFile != null && ProfileImageFile.Length > 0)
+            // Proceed with file saving
+            var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/profile-images");
+            if (!Directory.Exists(uploadsDir))
             {
-                var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/profile-images");
-
-                if (!Directory.Exists(uploadsDir))
-                {
-                    Directory.CreateDirectory(uploadsDir);
-                }
-
-                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(ProfileImageFile.FileName);
-                var filePath = Path.Combine(uploadsDir, uniqueFileName);
-
-                try
-                {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await ProfileImageFile.CopyToAsync(stream);
-                    }
-
-                    // Assign the file path to ProfileImageUrl
-                    user.ProfileImageUrl = $"/uploads/profile-images/{uniqueFileName}";
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("ProfileImageFile", $"An error occurred while saving the image: {ex.Message}");
-                    return Page();
-                }
+                Directory.CreateDirectory(uploadsDir);
             }
 
-            // Update First Name and Last Name only if they are changed
-            if (Input.FirstName != user.FirstName)
-            {
-                user.FirstName = Input.FirstName;
-            }
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(ProfileImageFile.FileName);
+            var filePath = Path.Combine(uploadsDir, uniqueFileName);
 
-            if (Input.LastName != user.LastName)
+            try
             {
-                user.LastName = Input.LastName;
-            }
-
-            // Update Phone Number if it's changed
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
-            {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    await ProfileImageFile.CopyToAsync(stream);
                 }
-            }
 
-            // Save changes to the user
-            var updateResult = await _userManager.UpdateAsync(user);
-            if (!updateResult.Succeeded)
+                // Assign the file path to ProfileImageUrl
+                user.ProfileImageUrl = $"/uploads/profile-images/{uniqueFileName}";
+            }
+            catch (Exception ex)
             {
-                StatusMessage = "Unexpected error when trying to update user.";
+                ModelState.AddModelError("ProfileImageFile", $"An error occurred while saving the image: {ex.Message}");
+                return Page();
+            }
+        }
+
+        // Update other properties and save changes
+        if (Input.FirstName != user.FirstName)
+        {
+            user.FirstName = Input.FirstName;
+        }
+
+        if (Input.LastName != user.LastName)
+        {
+            user.LastName = Input.LastName;
+        }
+
+        var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+        if (Input.PhoneNumber != phoneNumber)
+        {
+            var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+            if (!setPhoneResult.Succeeded)
+            {
+                StatusMessage = "Unexpected error when trying to set phone number.";
                 return RedirectToPage();
             }
+        }
 
-            // Refresh sign-in after update
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+        {
+            StatusMessage = "Unexpected error when trying to update user.";
             return RedirectToPage();
         }
+
+        await _signInManager.RefreshSignInAsync(user);
+        StatusMessage = "Your profile has been updated";
+        return RedirectToPage();
+    }
     }
 }

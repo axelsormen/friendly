@@ -1,13 +1,9 @@
 @using friendly.Models
 
-<div class="container">
-    <p>
-        <a class="btn btn-secondary" asp-controller="Post" asp-action="Create">Create New Post</a>
-    </p>
-    <table class="table table-striped">
-        @foreach (var post in Model)
-        {
-            <tr>
+<table class="table table-striped">
+    @foreach (var post in Model)
+    {
+        <tr>
                 <td colspan="5">
                     <div class="row align-items-start">
                         <!-- Column for the image and post content -->
@@ -108,7 +104,6 @@
             </tr>
         }
     </table>
-</div>
 
 <!-- JavaScript to handle toggle of Edit/Delete buttons -->
 <script>

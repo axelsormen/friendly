@@ -2,5 +2,6 @@
 
 <h1>Posts (@Model.CurrentViewName View)</h1>
 <a href="/Post/Grid" class="btn btn-primary">Grid View</a>
+<p><a class="btn btn-secondary" asp-controller="Post" asp-action="Create">Create New Post</a></p>
 
 <partial name="_PostTable" model="Model.Posts" />
