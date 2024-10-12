@@ -29,7 +29,6 @@ public class CommentController : Controller
 
     [HttpPost]
     [Authorize]
-  
     public async Task<IActionResult> Create(Comment comment)
     {
         _logger.LogInformation("Create action called with Comment data: {@Comment}", comment);
@@ -52,24 +51,16 @@ public class CommentController : Controller
                 await _commentRepository.Create(comment);
                 _logger.LogInformation("Comment created successfully with ID: {CommentId}", comment.CommentId);
                 
-                // Return to the same page after submission
+                // Redirect back to the same page after successful submission
                 return Redirect(Request.Headers["Referer"].ToString());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while creating the comment.");
+                ModelState.AddModelError("", "An error occurred while saving your comment.");
             }
-        }
-
-        foreach (var state in ModelState)
-        {
-            foreach (var error in state.Value.Errors)
-            {
-                _logger.LogWarning("Validation error on field {Field}: {ErrorMessage}", state.Key, error.ErrorMessage);
-            }
-        }
-
-        return View(comment);
+        }  
+        return Redirect(Request.Headers["Referer"].ToString());
     }
 
     [HttpGet]
@@ -92,14 +83,22 @@ public class CommentController : Controller
         if (ModelState.IsValid)
         {
             var originalComment = await _commentRepository.GetCommentById(comment.CommentId);
+            if (originalComment == null)
+            {
+                _logger.LogError("[CommentController] Comment not found when updating the CommentId {CommentId:0000}", comment.CommentId);
+                return BadRequest("Comment not found.");
+            }
+
             originalComment.CommentText = comment.CommentText;
 
             bool returnOk = await _commentRepository.Update(originalComment);
-            if(returnOk)
+            if (returnOk)
+            {
+                // Redirect back to the same page after successful update
                 return Redirect(Request.Headers["Referer"].ToString());
             }
-        _logger.LogWarning("[CommentController] Comment update failed {@comment}", comment);
-        return View(comment);
+        }
+        return Redirect(Request.Headers["Referer"].ToString());
     }
 
     [HttpGet]

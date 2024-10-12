@@ -1,5 +1,8 @@
-@model friendly.ViewModels.UsersViewModel // Change to use UsersViewModel
+@model friendly.ViewModels.UsersViewModel 
+@{
+    ViewData["Title"] = "User List";
+}
 
-<h1>User List</h1>
+<h1>@ViewData["Title"]</h1>
 
-<partial name="_UserTable" model="Model.Users" /> <!-- Pass the Users property from the view model -->
+<partial name="_UserTable" model="Model.Users" />

@@ -39,6 +39,7 @@ namespace friendly.Models
                         UserName = "axelsormen",
                         Email = "axelsormen@gmail.com",
                         ProfileImageUrl = "/uploads/profile-images/profileimage1.jpg",
+                        PhoneNumber = "+47 12345678",
                         EmailConfirmed = false,
                     },
                     new User
@@ -53,11 +54,20 @@ namespace friendly.Models
                     },
                     new User
                     {
-                        FirstName = "Jesper",
-                        LastName = "Schwartz",
-                        UserName = "jezzper",
-                        Email = "jeppe@hotmail.com",
+                        FirstName = "Simen",
+                        LastName = "Thams",
+                        UserName = "sthams",
+                        Email = "simenthams@hotmail.com",
                         ProfileImageUrl = "/uploads/profile-images/profileimage3.jpg",
+                        EmailConfirmed = false,
+                    },
+                    new User
+                    {
+                        FirstName = "Adina",
+                        LastName = "Heia",
+                        UserName = "adinah",
+                        Email = "aheia@hotmail.com",
+                        ProfileImageUrl = "/uploads/profile-images/profileimage4.jpg",
                         EmailConfirmed = false,
                     }
                 };
@@ -76,7 +86,8 @@ namespace friendly.Models
             // Get users from the database
             var axel = await userManager.FindByEmailAsync("axelsormen@gmail.com");
             var kristoffer = await userManager.FindByEmailAsync("kvamsy@gmail.com");
-            var jesper = await userManager.FindByEmailAsync("jeppe@hotmail.com");
+            var simen = await userManager.FindByEmailAsync("simenthams@hotmail.com");
+            var adina = await userManager.FindByEmailAsync("aheia@hotmail.com");
 
             // Seed posts
             if (!context.Posts.Any())
@@ -101,7 +112,7 @@ namespace friendly.Models
                 {
                     new Comment { CommentText = "Awesome!", CommentDate = DateTime.Now.ToString(), PostId = allPosts[1].PostId, UserId = axel.Id },
                     new Comment { CommentText = "Beautiful, wow!", CommentDate = DateTime.Now.ToString(), PostId = allPosts[0].PostId, UserId = kristoffer.Id },
-                    new Comment { CommentText = "You are such a great photographer", CommentDate = DateTime.Now.ToString(), PostId = allPosts[1].PostId, UserId = jesper.Id }
+                    new Comment { CommentText = "You are such a great photographer", CommentDate = DateTime.Now.ToString(), PostId = allPosts[1].PostId, UserId = adina.Id }
                 };
 
                 context.Comments.AddRange(comments);

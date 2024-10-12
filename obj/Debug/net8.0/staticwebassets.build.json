@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "k6RSoRJ3wBRVfB3l3N4eFhRbnf0hZ8Qv5b2uiE5z7fI=",
+  "Hash": "WnCPnj7Crnne+Y83zi4oiJxX8UH6nXjzWd+Wr118d54=",
   "Source": "friendly",
   "BasePath": "_content/friendly",
   "Mode": "Default",
@@ -1461,6 +1461,44 @@
       "OriginalItemSpec": "wwwroot/uploads/098149e5-119a-41ab-956a-9f1277ec4b36_profileimage2.jpeg"
     },
     {
+      "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/0a370a64-ad28-4049-b497-05ceafb79ba1_dots.png",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/0a370a64-ad28-4049-b497-05ceafb79ba1_dots.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/0a370a64-ad28-4049-b497-05ceafb79ba1_dots.png"
+    },
+    {
+      "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/10ba8644-d28f-43bf-ba8b-bd633d1447ee_profileimage2.jpeg",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/10ba8644-d28f-43bf-ba8b-bd633d1447ee_profileimage2.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/10ba8644-d28f-43bf-ba8b-bd633d1447ee_profileimage2.jpeg"
+    },
+    {
       "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/1f2afbfa-befd-4e00-9493-bc8e184fa61e_profileimage2.jpeg",
       "SourceId": "friendly",
       "SourceType": "Discovered",
@@ -2145,6 +2183,25 @@
       "OriginalItemSpec": "wwwroot/uploads/c5ff7cf6-a071-4155-af9c-fdfcb55fe464_profileimage2.jpeg"
     },
     {
+      "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/c89ff274-ef05-4d72-93e2-cd5a64052737_profileimage2.jpeg",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/c89ff274-ef05-4d72-93e2-cd5a64052737_profileimage2.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/c89ff274-ef05-4d72-93e2-cd5a64052737_profileimage2.jpeg"
+    },
+    {
       "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/cffb0e57-e170-4410-a01e-3c13d09b8d72_profileimage2.jpeg",
       "SourceId": "friendly",
       "SourceType": "Discovered",
@@ -2373,6 +2430,25 @@
       "OriginalItemSpec": "wwwroot/uploads/profile-images/2482e95b-4850-442c-b291-009c086a7c54_profileimage2.jpeg"
     },
     {
+      "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/profile-images/3fc7eac0-ba2d-41de-8321-a4c34260d49a_profileimage2.jpeg",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/profile-images/3fc7eac0-ba2d-41de-8321-a4c34260d49a_profileimage2.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/profile-images/3fc7eac0-ba2d-41de-8321-a4c34260d49a_profileimage2.jpeg"
+    },
+    {
       "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/profile-images/7c12cb57-5844-47bd-95b4-9fb5349f9e1c_pizza.jpg",
       "SourceId": "friendly",
       "SourceType": "Discovered",
@@ -2447,6 +2523,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/uploads/profile-images/9a7dd2d6-f497-4a00-89c3-10f5ed807d99_profileimage2.jpeg"
+    },
+    {
+      "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/profile-images/b83376ee-a783-4a96-a632-e769fca25e05_profileimage2.jpeg",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/profile-images/b83376ee-a783-4a96-a632-e769fca25e05_profileimage2.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/profile-images/b83376ee-a783-4a96-a632-e769fca25e05_profileimage2.jpeg"
     },
     {
       "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/profile-images/c4be223c-e044-4315-8595-00079484d88a_fishandchips.jpg",
@@ -2580,6 +2675,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/uploads/profile-images/profileimage3.jpg"
+    },
+    {
+      "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/uploads/profile-images/profileimage4.jpg",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/profile-images/profileimage4.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/profile-images/profileimage4.jpg"
     }
   ]
 }

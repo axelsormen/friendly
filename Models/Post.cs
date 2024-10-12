@@ -27,7 +27,7 @@ namespace friendly.Models
         [ValidateNever]
         public virtual User? User { get; set; }
 
-        // Navigation property for the comments
+        // Navgation property for the comments
         [ValidateNever]
         public virtual List<Comment>? Comments { get; set; }
     }

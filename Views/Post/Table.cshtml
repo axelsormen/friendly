@@ -1,6 +1,9 @@
 @model friendly.ViewModels.PostsViewModel // Ensure this is correct for both Table and Grid views
+@{
+    ViewData["Title"] = "Posts";
+}
 
-<h1>Posts (@Model.CurrentViewName View)</h1>
+<h1>@ViewData["Title"] (@Model.CurrentViewName View)</h1>
 <a href="/Post/Grid" class="btn btn-primary">Grid View</a>
 <p><a class="btn btn-secondary" asp-controller="Post" asp-action="Create">Create New Post</a></p>
 

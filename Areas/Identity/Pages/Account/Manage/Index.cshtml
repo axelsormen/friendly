@@ -35,9 +35,10 @@
                 <label asp-for="Input.PhoneNumber" class="form-label">Phone Number</label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-           <div class="form-floating mb-3">
-                <input type="file" name="ProfileImageFile" class="form-control"/> <!-- File input for profile image -->
-                <span asp-validation-for="ProfileImageUrl" class="text-danger"></span> <!-- For validation -->
+            <div class="mb-3">
+                <label for="ProfileImageFile" class="form-label">Profile Image</label> <!-- Custom label -->
+                <input type="file" name="ProfileImageFile" id="ProfileImageFile" class="form-control" /> <!-- File input -->
+                <span asp-validation-for="ProfileImageUrl" class="text-danger"></span> <!-- Validation message -->
             </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>

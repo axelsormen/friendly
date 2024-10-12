@@ -8,7 +8,9 @@ namespace friendly.Models
     {
         public int CommentId { get; set; }
 
-        [StringLength(200)] 
+        [Required(ErrorMessage = "Comment text is required.")]
+        [MinLength(1, ErrorMessage = "Comment must be at least 1 character long.")]
+        [MaxLength(200, ErrorMessage = "Comment cannot exceed 200 characters.")]
         public string? CommentText { get; set; }
 
         public string? CommentDate { get; set; }
