@@ -30,5 +30,10 @@ namespace friendly.Models
         // Navgation property for the comments
         [ValidateNever]
         public virtual List<Comment>? Comments { get; set; }
+        
+        // Navigation property for the likes
+        [ValidateNever]
+        public virtual List<Like>? Likes { get; set; }
+
     }
 }
