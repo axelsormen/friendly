@@ -1,5 +1,10 @@
 @using friendly.Models
 
+<head>
+   
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
 <div class="container">
     <p>
         <a class="btn btn-secondary" asp-controller="Post" asp-action="Create">Create New Post</a>
@@ -38,8 +43,14 @@
                                             </strong>
                                             <span class="text-muted" style="font-size: 0.9rem; margin-left: 5px;">@post.Caption</span>
                                         </div>
-                                    </div>
-                                
+                                          <!-- Like Button -->
+                                        <button id="heart-button-@post.PostId" class="heart" onClick="likePost(@post.PostId)" style="background: transparent; border: none; margin-left: 10px;">
+                                            <i class="far fa-heart"></i> <!-- Hjerteikonet -->
+                                            </button>
+                                        </div>
+                                    
+                                 
+                                  
                                 <!-- Toggle button for Edit/Delete actions (aligned to the right) -->
                                 <div>
                                     <button type="button" class="btn" onclick="toggleActions(@post.PostId)">
@@ -117,4 +128,32 @@
             actions.style.display = "none";
         }
     }
+
+   function likePost(postId) {
+    var heartButton = document.getElementById('heart-button-' + postId);
+    var heartIcon = heartButton.getElementsByTagName('i')[0];
+
+    // Send en Ajax POST-forespørsel til serveren
+    $.ajax({
+        url: '/Like/Create',  // endre til riktig URL for "Like"-handling
+        type: 'POST',
+        data: {
+            postId: postId,
+            // legg til ytterligere data her om nødvendig, f.eks. bruker-ID
+        },
+        success: function(response) {
+            console.log(response);
+
+            // Endre fargen på hjertet og ikonet bare når forespørselen er vellykket
+            heartButton.classList.toggle('liked');
+            heartIcon.classList.toggle('far');  // Tomt hjerte
+            heartIcon.classList.toggle('fas');  // Fylt hjerte
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+
 </script>
