@@ -7129,19 +7129,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/axel/.nuget/packages/": {}
+    "/Users/adinaheia/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/axel/Documents/Skole/friendly/friendly.csproj",
+      "projectUniqueName": "/Users/adinaheia/Documents/GitHub/friendly/friendly.csproj",
       "projectName": "friendly",
-      "projectPath": "/Users/axel/Documents/Skole/friendly/friendly.csproj",
-      "packagesPath": "/Users/axel/.nuget/packages/",
-      "outputPath": "/Users/axel/Documents/Skole/friendly/obj/",
+      "projectPath": "/Users/adinaheia/Documents/GitHub/friendly/friendly.csproj",
+      "packagesPath": "/Users/adinaheia/.nuget/packages/",
+      "outputPath": "/Users/adinaheia/Documents/GitHub/friendly/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/axel/.nuget/NuGet/NuGet.Config"
+        "/Users/adinaheia/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
