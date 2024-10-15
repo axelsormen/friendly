@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ERr8uZ3Y8Z0ZvkNNKqOmQkrduvfVrY6u/gT30sKtwlM=",
+  "Hash": "dEmWk2KxTpHf07w9hFvSeq9apkFxkFeWKeISSUqRYj4=",
   "Source": "friendly",
   "BasePath": "_content/friendly",
   "Mode": "Default",
@@ -1193,6 +1193,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/Users/axel/Documents/Skole/friendly/obj/Debug/net8.0/scopedcss/projectbundle/friendly.bundle.scp.css"
+    },
+    {
+      "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/css/styles.css",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "css/styles.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/styles.css"
     },
     {
       "Identity": "/Users/axel/Documents/Skole/friendly/wwwroot/images/beach.jpg",

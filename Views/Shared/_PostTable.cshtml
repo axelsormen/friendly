@@ -4,11 +4,6 @@
    
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
-
-<div class="container">
-    <p>
-        <a class="btn btn-secondary" asp-controller="Post" asp-action="Create">Create New Post</a>
-    </p>
     <table class="table table-striped">
         @foreach (var post in Model)
         {
@@ -162,6 +157,4 @@
         }
     });
 }
-
-
 </script>

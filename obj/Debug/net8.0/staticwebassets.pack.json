@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets/friendly.bundle.scp.css"
     },
     {
+      "Id": "/Users/axel/Documents/Skole/friendly/wwwroot/css/styles.css",
+      "PackagePath": "staticwebassets/css/styles.css"
+    },
+    {
       "Id": "/Users/axel/Documents/Skole/friendly/wwwroot/images/beach.jpg",
       "PackagePath": "staticwebassets/images/beach.jpg"
     },
