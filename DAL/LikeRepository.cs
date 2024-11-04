@@ -1,9 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using friendly.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace friendly.DAL
 {
@@ -18,67 +14,64 @@ namespace friendly.DAL
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Like>?> GetAll()
-        {
-            try
-            {
-                return await _db.Likes.ToListAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("[LikeRepository] Likes ToListAsync() failed when GetAll(), error message: {e}", e.Message);
-                return null;
-            }
-        }
-
-        public async Task<Like?> GetLikeById(int id)
-        {
-            try
-            {
-                return await _db.Likes.FindAsync(id);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("[LikeRepository] Like FindAsync(id) failed when GetLikeById for LikeId {LikeId:0000}, error message: {e}", id, e.Message);
-                return null;
-            }
-        }
-
         public async Task<bool> Create(Like like)
         {
             try
             {
-                _db.Likes.Add(like);
+                // Sjekk om en like allerede eksisterer
+                var existingLike = await _db.Likes
+                    .FirstOrDefaultAsync(l => l.PostId == like.PostId && l.UserId == like.UserId);
+
+                if (existingLike != null)
+                {
+                    return false; // Returner false hvis like allerede finnes
+                }
+
+                // Legg til like hvis den ikke finnes
+                await _db.Likes.AddAsync(like);
                 await _db.SaveChangesAsync();
-                return true;
+                return true; // Returner true hvis like ble lagt til
             }
             catch (Exception e)
             {
-                _logger.LogError("[LikeRepository] Like creation failed for Like {@Like}, error message: {e}", like, e.Message);
-                return false;
+                _logger.LogError(e, "Error occurred while creating like for PostId: {PostId} and UserId: {UserId}", like.PostId, like.UserId);
+                return false; // Return false ved feil
             }
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> DeleteByPostAndUser(int postId, string userId)
         {
             try
             {
-                var like = await _db.Likes.FindAsync(id);
-                if (like == null)
+                var like = await _db.Likes
+                    .FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == userId);
+                
+                if (like != null)
                 {
-                    _logger.LogError("[LikeRepository] Like not found for the LikeId {LikeId:0000}", id);
-                    return false;
+                    _db.Likes.Remove(like);
+                    await _db.SaveChangesAsync();
+                    return true; // Returner true hvis like ble slettet
                 }
-
-                _db.Likes.Remove(like);
-                await _db.SaveChangesAsync();
-                return true;
+                
+                return false; // Return false hvis like ikke finnes
             }
             catch (Exception e)
             {
-                _logger.LogError("[LikeRepository] Like deletion failed for the LikeId {LikeId:0000}, error message: {e}", id, e.Message);
-                return false;
+                _logger.LogError(e, "Error occurred while deleting like for PostId: {PostId} and UserId: {UserId}", postId, userId);
+                return false; // Return false ved feil
             }
+        }
+        
+        public async Task<int> GetLikesCount(int postId)
+        {
+            return await _db.Likes.CountAsync(l => l.PostId == postId);
         }
     }
 }
+            
+    
+
+
+
+
+

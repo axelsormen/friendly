@@ -1,14 +1,12 @@
-using friendly.Models;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using friendly.Models;
 
 namespace friendly.DAL
 {
     public interface ILikeRepository
     {
-        Task<IEnumerable<Like>?> GetAll();
-        Task<Like?> GetLikeById(int id);
         Task<bool> Create(Like like);
-        Task<bool> Delete(int id);
+        Task<bool> DeleteByPostAndUser(int postId, string userId);
+        Task<int> GetLikesCount(int postId); // New method to get likes count
     }
 }

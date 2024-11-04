@@ -1,51 +1,102 @@
+@using System.Security.Claims
 @using friendly.Models
 
 <head>
-   
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+    .like-buttons {
+        display: flex;
+        align-items: center; /* Center items vertically */
+    }
+
+    button.like-button,
+    button.unlike-button {
+        background: transparent;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        padding: 0; /* Ensures there is no internal padding */
+        cursor: pointer; /* Makes sure the button behaves like a button */
+    }
+
+    button.like-button i,
+    button.unlike-button i {
+        font-size: 25px; /* Adjust icon size as needed */
+        padding: 0; /* Removes any internal padding */
+        margin-right: 10px; /* Adjust spacing */
+    }
+
+    button.unlike-button i {
+        color: red; /* Sets the icon color */
+    }
+
+    /* Remove focus outline for accessibility if desired */
+    button:focus {
+        outline: none;
+    }
+
+    .likes-count {
+        font-size: 16px; /* Adjust the font size as needed */
+        display: inline-block; /* Ensure it's treated as a block to help with spacing */
+        vertical-align: middle; /* Align with the center of the buttons */
+    }
+</style>
+
+    
+
 </head>
-    <table class="table table-striped">
-        @foreach (var post in Model)
-        {
-            <tr>
-                <td colspan="5">
+<table class="table table-striped">
+    @foreach (var post in Model)
+    {
+        var heartClass = ((List<Like>)post.Likes).Any(l => l.UserId == User.FindFirst(ClaimTypes.NameIdentifier)?.Value) ? "fas" : "far";
+
+        <tr>
+            <td colspan="5">
+                <!-- Container to encapsulate the row structure for alignment -->
+                <div class="container">
                     <div class="row align-items-start">
                         <!-- Column for the image and post content -->
                         <div class="col-md-6">
                             <img src="@post.PostImagePath" alt="Post Image" class="img-fluid" style="height: 400px; object-fit: cover;" />
                             
-                            <!-- Post caption and dot button row -->
+                            <!-- Post caption and button row -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center mb-3">
-                                @if (post.User != null && !string.IsNullOrEmpty(post.User.ProfileImageUrl))
+                                    @if (post.User != null && !string.IsNullOrEmpty(post.User.ProfileImageUrl))
                                     {
-                                    <img alt="@post.User.UserName" 
-                                        src="@post.User.ProfileImageUrl" 
-                                        class="img-fluid rounded-circle" 
-                                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />                        }
+                                        <img alt="@post.User.UserName" 
+                                            src="@post.User.ProfileImageUrl" 
+                                            class="img-fluid rounded-circle" 
+                                            style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />                        
+                                    }
                                     else
                                     {
-                                    <img alt="No Profile Image" 
-                                        src="/uploads/profile-images/defaultprofileimage.jpg" 
-                                        class="img-fluid rounded-circle" 
-                                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
+                                        <img alt="No Profile Image" 
+                                            src="/uploads/profile-images/defaultprofileimage.jpg" 
+                                            class="img-fluid rounded-circle" 
+                                            style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
                                     }
-                                        <div>
-                                            <strong>
-                                                <a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" class="text-dark" style="text-decoration: none; font-size: 1.1rem;">
-                                                    @post.User.UserName
-                                                </a>
-                                            </strong>
-                                            <span class="text-muted" style="margin-left: 5px;">@post.Caption</span>
-                                        </div>
-                                          <!-- Like Button -->
-                                        <button id="heart-button-@post.PostId" class="heart" onClick="likePost(@post.PostId)" style="background: transparent; border: none; margin-left: 10px;">
-                                            <i class="far fa-heart"></i> <!-- Hjerteikonet -->
-                                            </button>
-                                        </div>
-                                    
-                                 
-                                  
+                                    <div>
+                                        <strong>
+                                            <a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" class="text-dark" style="text-decoration: none; font-size: 1.1rem;">
+                                                @post.User.UserName
+                                            </a>
+                                        </strong>
+                                        <span class="text-muted" style="margin-left: 5px;">@post.Caption</span>
+                                    </div>
+                                </div>
+
+                                <!-- Toggle button for Like/Unlike actions moved to the right -->
+                            <div class="like-buttons">
+                                <button class="like-button" data-post-id="@post.PostId" data-user-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" style="display: @(heartClass == "fas" ? "none" : "block")">
+                                    <i class="@heartClass fa-heart"></i>
+                                </button>
+                                <button class="unlike-button" data-post-id="@post.PostId" data-user-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" style="display: @(heartClass == "fas" ? "block" : "none")">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <span id="likes-count-@post.PostId">@post.Likes.Count Likes</span> <!-- Display initial count of likes -->
+                            </div>
+
+
                                 <!-- Toggle button for Edit/Delete actions (aligned to the right) -->
                                 <div>
                                     <button type="button" class="btn" onclick="toggleActions(@post.PostId)">
@@ -68,39 +119,40 @@
                         <!-- Column for comments and replies -->
                         <div class="col-md-6">
                             <!-- Display existing comments -->
-                        <div>
-                            @if (post.Comments != null && post.Comments.Count > 0)
-                            {
-                                <ul style="list-style-type:none; padding-left:0;">
-                                    @foreach (var comment in post.Comments)
-                                    {
-                                        <li class="mb-2">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <p class="mb-0">
-                                                    <strong>
-                                                        <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" 
-                                                            class="text-dark" style="text-decoration: none;">
-                                                            @comment.User.UserName
-                                                        </a>                                                    
-                                                    </strong>
-                                                    <span>@comment.CommentText</span>
-                                                    <small class="text-muted">(@comment.CommentDate)</small>
-                                                </p>
+                            <div>
+                                @if (post.Comments != null && post.Comments.Count > 0)
+                                {
+                                    <ul style="list-style-type:none; padding-left:0;">
+                                        @foreach (var comment in post.Comments)
+                                        {
+                                            <li class="mb-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <p class="mb-0">
+                                                        <strong>
+                                                            <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" 
+                                                                class="text-dark" style="text-decoration: none;">
+                                                                @comment.User.UserName
+                                                            </a>                                                    
+                                                        </strong>
+                                                        <span>@comment.CommentText</span>
+                                                        <small class="text-muted">(@comment.CommentDate)</small>
+                                                    </p>
 
-                                                <!-- Delete comment button on the same line -->
-                                                <form asp-controller="Comment" form asp-action="DeleteConfirmed" asp-route-id="@comment.CommentId" class="d-inline">
-                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                                </form>
-                                            </div>
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <span><i>No comments yet</i></span>
-                            }
-                        </div>
+                                                    <!-- Delete comment button on the same line -->
+                                                    <form asp-controller="Comment" asp-action="DeleteConfirmed" asp-route-id="@comment.CommentId" class="d-inline">
+                                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <span><i>No comments yet</i></span>
+                                }
+                            </div>
+
                             <!-- Comment input field for the post -->
                             <div class="mt-3">
                                 <form asp-controller="Comment" asp-action="Create" method="post">
@@ -113,13 +165,14 @@
                             </div>
                         </div>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" style="height:20px;"></td>
-            </tr>
-        }
-    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" style="height:20px;"></td>
+        </tr>
+    }
+</table>
 
 <!-- JavaScript to handle toggle of Edit/Delete buttons -->
 <script>
@@ -131,30 +184,141 @@
             actions.style.display = "none";
         }
     }
+</script>
+<script>
+$(document).ready(function() {
+    // Event delegation for like and unlike buttons
+    $(document).on('click', '.like-button', function() {
+        var postId = $(this).data('post-id');
+        var userId = $(this).data('user-id');
+        var heartIcon = $(this).find('i'); // Get the heart icon element
 
-   function likePost(postId) {
-    var heartButton = document.getElementById('heart-button-' + postId);
-    var heartIcon = heartButton.getElementsByTagName('i')[0];
+        $.ajax({
+            type: 'POST',
+            url: '/Like/Create',
+            data: { postId: postId, userId: userId },
+            success: function(response) {
+                showMessage("Post liked!", heartIcon);
+                // Update the likes count for the specific post
+                var likesCountElement = $('#likes-count-' + postId);
+                var currentCount = parseInt(likesCountElement.text());
+                likesCountElement.text(currentCount + 1 + ' Likes');
 
-    // Send en Ajax POST-forespørsel til serveren
-    $.ajax({
-        url: '/Like/Create',  // endre til riktig URL for "Like"-handling
-        type: 'POST',
-        data: {
-            postId: postId,
-            // legg til ytterligere data her om nødvendig, f.eks. bruker-ID
-        },
-        success: function(response) {
-            console.log(response);
+                // Hide the like button and show the unlike button
+                $('.like-button[data-post-id="' + postId + '"]').hide();
+                $('.unlike-button[data-post-id="' + postId + '"]').show();
 
-            // Endre fargen på hjertet og ikonet bare når forespørselen er vellykket
-            heartButton.classList.toggle('liked');
-            heartIcon.classList.toggle('far');  // Tomt hjerte
-            heartIcon.classList.toggle('fas');  // Fylt hjerte
-        },
-        error: function(error) {
-            console.log(error);
-        }
+                // Change the heart icon class to represent "liked"
+                $('.like-button[data-post-id="' + postId + '"] i').removeClass('far').addClass('fas');
+                $('.unlike-button[data-post-id="' + postId + '"] i').removeClass('far').addClass('fas');
+            },
+            error: function(xhr, status, error) {
+                showMessage("Failed to like the post: " + error, heartIcon);
+            }
+        });
+    });
+
+    $(document).ready(function() {
+    $('.like-buttons').each(function() {
+        var postId = $(this).find('.like-button').data('post-id');
+
+        // Fetch likes count for the post
+        $.ajax({
+            type: 'GET',
+            url: '/Like/GetLikesCount',
+            data: { postId: postId },
+            success: function(count) {
+                $('#likes-count-' + postId).text(count + ' Likes'); // Update the likes count displayed
+            },
+            error: function() {
+                console.error('Failed to fetch likes count');
+            }
+        });
+    });
+});
+
+
+    $(document).on('click', '.unlike-button', function() {
+        var postId = $(this).data('post-id');
+        var userId = $(this).data('user-id');
+        var heartIcon = $('.unlike-button[data-post-id="' + postId + '"]').find('i'); // Get the heart icon element from the like button
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/Like/DeleteConfirmed',
+            data: { postId: postId, userId: userId },
+            success: function(response) {
+                showMessage("Post unliked!", heartIcon);
+
+                // Update the likes count for the specific post
+                var likesCountElement = $('#likes-count-' + postId);
+                var currentCount = parseInt(likesCountElement.text());
+                likesCountElement.text(currentCount - 1 + ' Likes');
+
+                // Hide the unlike button and show the like button
+                $('.unlike-button[data-post-id="' + postId + '"]').hide();
+                $('.like-button[data-post-id="' + postId + '"]').show();
+
+                // Change the heart icon class to represent "not liked"
+                $('.like-button[data-post-id="' + postId + '"] i').removeClass('fas').addClass('far');
+                $('.unlike-button[data-post-id="' + postId + '"] i').removeClass('fas').addClass('far');
+            },
+            error: function(xhr, status, error) {
+                showMessage("Failed to unlike the post: " + error, heartIcon);
+            }
+        });
+    });
+});
+
+// Modified showMessage function to position beside the heart icon
+function showMessage(message, heartIcon) {
+    // Create a div for the message if it doesn't exist
+    if ($('#message-box').length === 0) {
+        $('body').append('<div id="message-box" style="position: absolute; background-color: #4CAF50; color: white; padding: 5px; border-radius: 5px; z-index: 1000;">' + message + '</div>');
+    } else {
+        $('#message-box').text(message);
+    }
+
+    // Calculate position based on the heart icon's position
+    var offset = heartIcon.offset();
+    $('#message-box').css({
+        top: offset.top - 40, // Position above the heart icon
+        left: offset.left + heartIcon.width() + 5 // Position to the right of the heart icon
+    });
+
+    // Show the message and hide it after 2 seconds
+    $('#message-box').fadeIn(300).delay(2000).fadeOut(200, function() {
+        $(this).remove(); // Remove the message box after fading out
     });
 }
 </script>
+
+
+
+       
+ 
+
+       
+
+   
+
+  
+
+
+
+         
+
+
+
+
+
+
+  
+
+
+   
+       
+
+
+
