@@ -20,7 +20,8 @@ namespace friendly.DAL
         {
             try
             {
-                return await _db.Posts.Include(p => p.Likes).OrderByDescending(p => p.PostDate).ToListAsync();
+                return await _db.Posts.OrderByDescending(p => p.PostDate).ToListAsync();
+            
             }
             catch (Exception e)
             {
@@ -46,7 +47,7 @@ namespace friendly.DAL
         {
             try
             {
-                return await _db.Posts.Include(p => p.Likes).FirstOrDefaultAsync(p => p.PostId == id);
+                return await _db.Posts.FindAsync(id);
             }
             catch (Exception e)
             {
