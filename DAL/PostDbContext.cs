@@ -13,7 +13,7 @@ namespace friendly.Models
 
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
-         public DbSet<Like> Likes { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,18 +31,16 @@ namespace friendly.Models
                 .WithMany(p => p.Comments) // A Post can have many Comments
                 .HasForeignKey(c => c.PostId); // Foreign key is PostId in Comment
                 
-                // Define the relationship between Like and Post
-            modelBuilder
-            .Entity<Like>()
-            .HasOne(l => l.Post) // Each Like is associated with one Post
-            .WithMany(p => p.Likes) // A Post can have many Likes
-            .HasForeignKey(l => l.PostId); // Foreign key is PostId in Like
-            
-            // Define the relationship between Like and User
+               
             modelBuilder.Entity<Like>()
-            .HasOne(l => l.User) // Each Like is associated with one User
-            .WithMany() // A User can have many Likes
-            .HasForeignKey(l => l.UserId); // Foreign key is UserId in Like
+                .HasOne(l => l.Post) // Hver Like er knyttet til én Post
+                .WithMany(p => p.Likes) // En Post kan ha mange Likes
+                .HasForeignKey(l => l.PostId); // Fremmednøkkel er PostId i Like
+
+            
+            modelBuilder.Entity<Like>()
+                .HasIndex(l => new { l.PostId, l.UserId })
+                .IsUnique();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using friendly.DAL;
 using friendly.Models;
-using friendly.ViewModels;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+
 
 namespace friendly.Controllers
 {
@@ -20,48 +19,64 @@ namespace friendly.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create(Like like)
+        public async Task<IActionResult> Create(int postId, string userId)
         {
+            var like = new Like
+            {
+                PostId = postId,
+                UserId = userId
+            };
+
             _logger.LogInformation("Create action called with Like data: {@Like}", like);
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    await _likeRepository.Create(like);
-                    _logger.LogInformation("Like created successfully with ID: {LikeId}", like.LikeId);
-                    
-                    // Return to the same page after submission
-                    return Redirect(Request.Headers["Referer"].ToString());
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "An error occurred while creating the like.");
-                }
-            }
+                bool result = await _likeRepository.Create(like);
 
-            foreach (var state in ModelState)
+                if (!result)
+                {
+                    _logger.LogWarning("Like already exists for postId {PostId} and userId {UserId}", postId, userId);
+                    return Conflict("Like already exists"); // Return a 409 Conflict status code
+                }
+
+                _logger.LogInformation("Like created successfully with ID: {LikeId}", like.LikeId);
+                return Ok();
+            }
+            catch (Exception ex)
             {
-                foreach (var error in state.Value.Errors)
-                {
-                    _logger.LogWarning("Validation error on field {Field}: {ErrorMessage}", state.Key, error.ErrorMessage);
-                }
+                _logger.LogError(ex, "An error occurred while creating the like.");
+                return BadRequest("Unable to process Like data");
             }
-
-            return View(like);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        
+        public async Task<IActionResult> DeleteConfirmed(int postId, string userId)
+        
         {
-            bool returnOk = await _likeRepository.Delete(id);
-            if(!returnOk)
+            bool returnOk = await _likeRepository.DeleteByPostAndUser(postId, userId);
+            if (!returnOk)
+            
             {
-                _logger.LogError("[LikeController] Like deletion failed for the LikeId {LikeId:0000}", id);
+                _logger.LogError("[LikeController] Like deletion failed for postId {PostId} and userId {UserId}", postId, userId);
                 return BadRequest("Like deletion failed");
+                
             }
-            return Redirect(Request.Headers["Referer"].ToString());
+            return Ok();
+
         }
+        [HttpGet]
+        [Authorize]
+        
+        public async Task<IActionResult> GetLikesCount(int postId)
+        {
+            var count = await _likeRepository.GetLikesCount(postId);
+            return Ok(count);
+        }
+
     }
 }
+
+
+

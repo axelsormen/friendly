@@ -1,27 +1,22 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace friendly.Models
 {
     public class Like
     {
-        [Key]
-        public int LikeId { get; set; } //hvert like har en id
+        public int LikeId { get; set; } // Primærnøkkel for Like
 
-        
-        [ValidateNever]
-        public string? UserId { get; set; } //kobler en like til en bruker, personen som liker bildet
+        [Required(ErrorMessage = "Post ID is required.")]
+        public int PostId { get; set; } // Fremmednøkkel til Post
 
-        
-        [ValidateNever]
-        public virtual User? User { get; set; } //henter user objektet for personen som liker bildet
+        [Required(ErrorMessage = "User ID is required.")]
+        [MaxLength(450)] // Typisk lengde for UserId
+        public string? UserId { get; set; } // Fremmednøkkel til User
 
-        
         [ValidateNever]
-        public int? PostId { get; set; } //kobler like til et objekt
-
-        // Navigation property to Post
-        [ValidateNever]
-        public virtual Post? Post { get; set; } 
+        public virtual Post? Post { get; set; } // Navigasjonspropertie til Post
     }
 }
+
+
