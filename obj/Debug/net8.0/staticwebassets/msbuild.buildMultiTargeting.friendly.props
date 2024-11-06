@@ -1,3 +1,3 @@
 ﻿<Project>
-  <Import Project="../build/friendly.props" />
+  <Import Project="..\build\friendly.props" />
 </Project>

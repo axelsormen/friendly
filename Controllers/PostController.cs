@@ -163,6 +163,13 @@ public class PostController : Controller
             _logger.LogError("[PostController] Post not found when updating the PostId {PostId:0000}", id);
             return BadRequest("Post not found for the PostId");
         }
+        // Ownership check: 
+            var user = await _userManager.GetUserAsync(User);
+            if (post.UserId != user.Id)
+            {
+                return Forbid();  // 403 Forbidden if user is not the owner
+            }
+
         return View(post);
     }
 
@@ -170,19 +177,31 @@ public class PostController : Controller
     [Authorize]
     public async Task<IActionResult> Update(Post post)
     {
-        if (ModelState.IsValid)
-        {
-            var originalPost = await _postRepository.GetPostById(post.PostId);
-            originalPost.Caption = post.Caption;
+        var originalPost = await _postRepository.GetPostById(post.PostId);
+            if (originalPost == null)
+            {
+                return NotFound();
+            }
 
-            bool returnOk = await _postRepository.Update(originalPost);
-            if (returnOk)
-                return RedirectToAction(nameof(Table));
+            // Ownership check: Ensure that only the owner can update
+            var user = await _userManager.GetUserAsync(User);
+            if (originalPost.UserId != user.Id)
+            {
+                return Forbid();  // 403 Forbidden if user is not the owner
+            }
+
+            if (ModelState.IsValid)
+            {
+                originalPost.Caption = post.Caption;  // Update only the necessary fields
+                bool returnOk = await _postRepository.Update(originalPost);
+                if (returnOk)
+                {
+                    return RedirectToAction(nameof(Table));
+                }
+            }
+
+            return View(post);
         }
-
-        _logger.LogWarning("[PostController] Post update failed {@post}", post);
-        return View(post);
-    }
 
     [HttpGet]
     [Authorize]
@@ -194,6 +213,12 @@ public class PostController : Controller
             _logger.LogError("[PostController] Post not found for the PostId {PostId:0000}", id);
             return BadRequest("Post not found for the PostId");
         }
+        // Ownership check: 
+            var user = await _userManager.GetUserAsync(User);
+            if (post.UserId != user.Id)
+            {
+                return Forbid();  
+            }
         return View(post);
     }
 

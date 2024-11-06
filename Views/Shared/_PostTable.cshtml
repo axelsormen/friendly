@@ -1,73 +1,87 @@
 @using friendly.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 
 <head>
-   
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
-    <table class="table table-striped">
-        @foreach (var post in Model)
-        {
-            <tr>
-                <td colspan="5">
-                    <div class="row align-items-start">
-                        <!-- Column for the image and post content -->
-                        <div class="col-md-6">
-                            <img src="@post.PostImagePath" alt="Post Image" class="img-fluid" style="height: 400px; object-fit: cover;" />
-                            
-                            <!-- Post caption and dot button row -->
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center mb-3">
+<table class="table table-striped">
+    
+    @{
+        var currentUser = await UserManager.GetUserAsync(User);
+    }
+
+    @foreach (var post in Model)
+    {
+        <tr>
+            <td colspan="5">
+                <div class="row align-items-start">
+                    <!-- Column for the image and post content -->
+                    <div class="col-md-6">
+                        <img src="@post.PostImagePath" alt="Post Image" class="img-fluid" style="height: 400px; object-fit: cover;" />
+                        
+                        <!-- Post caption and dot button row -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center mb-3">
                                 @if (post.User != null && !string.IsNullOrEmpty(post.User.ProfileImageUrl))
-                                    {
+                                {
                                     <img alt="@post.User.UserName" 
                                         src="@post.User.ProfileImageUrl" 
                                         class="img-fluid rounded-circle" 
-                                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />                        }
-                                    else
-                                    {
+                                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
+                                }
+                                else
+                                {
                                     <img alt="No Profile Image" 
                                         src="/uploads/profile-images/defaultprofileimage.jpg" 
                                         class="img-fluid rounded-circle" 
                                         style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
-                                    }
-                                        <div>
-                                            <strong>
-                                                <a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" class="text-dark" style="text-decoration: none; font-size: 1.1rem;">
-                                                    @post.User.UserName
-                                                </a>
-                                            </strong>
-                                            <span class="text-muted" style="margin-left: 5px;">@post.Caption</span>
-                                        </div>
-                                          <!-- Like Button -->
-                                        <button id="heart-button-@post.PostId" class="heart" onClick="likePost(@post.PostId)" style="background: transparent; border: none; margin-left: 10px;">
-                                            <i class="far fa-heart"></i> <!-- Hjerteikonet -->
-                                            </button>
-                                        </div>
-                                    
-                                 
-                                  
-                                <!-- Toggle button for Edit/Delete actions (aligned to the right) -->
+                                }
                                 <div>
+                                    <strong>
+                                        <a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" class="text-dark" style="text-decoration: none; font-size: 1.1rem;">
+                                            @post.User.UserName
+                                        </a>
+                                    </strong>
+                                    <span class="text-muted" style="margin-left: 5px;">@post.Caption</span>
+                                </div>
+
+                                <!-- Like Button -->
+                                <button id="heart-button-@post.PostId" class="heart" onClick="likePost(@post.PostId)" style="background: transparent; border: none; margin-left: 10px;">
+                                    <i class="far fa-heart"></i> <!-- Heart icon -->
+                                </button>
+                            </div>
+
+                            <!-- Toggle button for Edit/Delete actions (aligned to the right) -->
+                            <div>
+                                <!-- Check if the logged-in user is the owner of the post -->
+                                @if (currentUser != null && post.UserId == currentUser.Id)
+                                {
                                     <button type="button" class="btn" onclick="toggleActions(@post.PostId)">
                                         <img src="~/images/dots.png" alt="Options" style="height: 24px; width: 24px;" />
                                     </button>
-                                </div>
-                            </div>
-
-                            <p>
-                                <small class="text-muted">@post.PostDate</small>
-                            </p>
-
-                            <!-- Hidden action buttons (Edit and Delete) -->
-                            <div id="actions-@post.PostId" style="display:none;" class="mt-3">
-                                <a asp-action="Update" asp-route-id="@post.PostId" class="btn btn-primary btn-sm">Edit Caption</a>
-                                <a asp-action="Delete" asp-route-id="@post.PostId" class="btn btn-danger btn-sm">Delete Post</a>
+                                }
                             </div>
                         </div>
 
-                        <!-- Column for comments and replies -->
-                        <div class="col-md-6">
-                            <!-- Display existing comments -->
+                        <p>
+                            <small class="text-muted">@post.PostDate</small>
+                        </p>
+
+                        <!-- Hidden action buttons (Edit and Delete) -->
+                        <div id="actions-@post.PostId" style="display:none;" class="mt-3">
+                            <!-- Show Edit/Delete buttons only if the logged-in user is the owner of the post -->
+                            @if (currentUser != null && post.UserId == currentUser.Id)
+                            {
+                                <a asp-action="Update" asp-route-id="@post.PostId" class="btn btn-primary btn-sm">Edit Caption</a>
+                                <a asp-action="Delete" asp-route-id="@post.PostId" class="btn btn-danger btn-sm">Delete Post</a>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Column for comments and replies -->
+                    <div class="col-md-6">
+                        <!-- Display existing comments -->
                         <div>
                             @if (post.Comments != null && post.Comments.Count > 0)
                             {
@@ -87,10 +101,13 @@
                                                     <small class="text-muted">(@comment.CommentDate)</small>
                                                 </p>
 
-                                                <!-- Delete comment button on the same line -->
-                                                <form asp-controller="Comment" form asp-action="DeleteConfirmed" asp-route-id="@comment.CommentId" class="d-inline">
-                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                                </form>
+                                                <!-- Check if the logged-in user is the owner of the comment -->
+                                                @if (currentUser != null && comment.UserId == currentUser.Id)
+                                                {
+                                                    <form asp-controller="Comment" form asp-action="DeleteConfirmed" asp-route-id="@comment.CommentId" class="d-inline">
+                                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                    </form>
+                                                }
                                             </div>
                                         </li>
                                     }
@@ -101,25 +118,26 @@
                                 <span><i>No comments yet</i></span>
                             }
                         </div>
-                            <!-- Comment input field for the post -->
-                            <div class="mt-3">
-                                <form asp-controller="Comment" asp-action="Create" method="post">
-                                    <input type="hidden" name="PostId" value="@post.PostId" />
-                                    <textarea class="form-control" name="CommentText" rows="2" placeholder="Write a comment..."></textarea>
-                                    <div class="d-flex justify-content-end mt-2">
-                                        <button type="submit" class="btn btn-secondary btn-sm">Post Comment</button>
-                                    </div>
-                                </form>
-                            </div>
+
+                        <!-- Comment input field for the post -->
+                        <div class="mt-3">
+                            <form asp-controller="Comment" asp-action="Create" method="post">
+                                <input type="hidden" name="PostId" value="@post.PostId" />
+                                <textarea class="form-control" name="CommentText" rows="2" placeholder="Write a comment..."></textarea>
+                                <div class="d-flex justify-content-end mt-2">
+                                    <button type="submit" class="btn btn-secondary btn-sm">Post Comment</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" style="height:20px;"></td>
-            </tr>
-        }
-    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5" style="height:20px;"></td>
+        </tr>
+    }
+</table>
 
 <!-- JavaScript to handle toggle of Edit/Delete buttons -->
 <script>
@@ -132,29 +150,26 @@
         }
     }
 
-   function likePost(postId) {
-    var heartButton = document.getElementById('heart-button-' + postId);
-    var heartIcon = heartButton.getElementsByTagName('i')[0];
+    function likePost(postId) {
+        var heartButton = document.getElementById('heart-button-' + postId);
+        var heartIcon = heartButton.getElementsByTagName('i')[0];
 
-    // Send en Ajax POST-forespørsel til serveren
-    $.ajax({
-        url: '/Like/Create',  // endre til riktig URL for "Like"-handling
-        type: 'POST',
-        data: {
-            postId: postId,
-            // legg til ytterligere data her om nødvendig, f.eks. bruker-ID
-        },
-        success: function(response) {
-            console.log(response);
-
-            // Endre fargen på hjertet og ikonet bare når forespørselen er vellykket
-            heartButton.classList.toggle('liked');
-            heartIcon.classList.toggle('far');  // Tomt hjerte
-            heartIcon.classList.toggle('fas');  // Fylt hjerte
-        },
-        error: function(error) {
-            console.log(error);
-        }
-    });
-}
+        // Send Ajax POST request to the server
+        $.ajax({
+            url: '/Like/Create',  // Modify to correct URL for "Like" action
+            type: 'POST',
+            data: {
+                postId: postId,
+            },
+            success: function(response) {
+                console.log(response);
+                heartButton.classList.toggle('liked');
+                heartIcon.classList.toggle('far');  // Empty heart
+                heartIcon.classList.toggle('fas');  // Filled heart
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
 </script>
