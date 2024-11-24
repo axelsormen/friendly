@@ -75,6 +75,30 @@ namespace friendly.Areas.Identity.Pages.Account.Manage
             };
         }
 
+        public async Task<IActionResult> OnPostDeleteConfirmedAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            // Delete the user
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                // If deletion fails, show an error message and reload the page
+                StatusMessage = "Error: Unable to delete the user.";
+                return RedirectToPage();
+            }
+
+            // Sign out the user
+            await _signInManager.SignOutAsync();
+
+            // Redirect to the home page after deletion
+            return RedirectToPage("/Home/Index");
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);

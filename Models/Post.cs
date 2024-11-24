@@ -34,8 +34,5 @@ namespace friendly.Models
         // Navigation property for the likes
         [ValidateNever]
         public virtual List<Like>? Likes { get; set; }
-
-    
-
     }
 }
