@@ -1,3 +1,0 @@
-2024-10-06 00:15:46.096 +02:00 [INF] User profile is available. Using '/Users/axel/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
-2024-10-06 00:15:46.613 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
-PRAGMA journal_mode = 'wal';

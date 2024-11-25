@@ -1,0 +1,14 @@
+2024-10-03 21:03:45.838 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2024-10-03 21:03:45.877 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2024-10-03 21:03:45.877 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2024-10-03 21:03:45.878 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2024-10-03 21:03:45.884 +02:00 [INF] No migrations were applied. The database is already up to date.

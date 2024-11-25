@@ -1,0 +1,294 @@
+2024-10-03 21:13:19.766 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA journal_mode = 'wal';
+2024-10-03 21:13:19.809 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Users" (
+    "UserId" INTEGER NOT NULL CONSTRAINT "PK_Users" PRIMARY KEY AUTOINCREMENT,
+    "Name" TEXT NOT NULL,
+    "Username" TEXT NOT NULL,
+    "Email" TEXT NOT NULL,
+    "ProfileImageUrl" TEXT NULL
+);
+2024-10-03 21:13:19.809 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Posts" (
+    "PostId" INTEGER NOT NULL CONSTRAINT "PK_Posts" PRIMARY KEY AUTOINCREMENT,
+    "PostImagePath" TEXT NOT NULL,
+    "Caption" TEXT NOT NULL,
+    "PostDate" TEXT NOT NULL,
+    "UserId" INTEGER NOT NULL,
+    CONSTRAINT "FK_Posts_Users_UserId" FOREIGN KEY ("UserId") REFERENCES "Users" ("UserId") ON DELETE CASCADE
+);
+2024-10-03 21:13:19.809 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Comments" (
+    "CommentId" INTEGER NOT NULL CONSTRAINT "PK_Comments" PRIMARY KEY AUTOINCREMENT,
+    "CommentText" TEXT NOT NULL,
+    "CommentDate" TEXT NOT NULL,
+    "UserId" INTEGER NOT NULL,
+    "PostId" INTEGER NOT NULL,
+    CONSTRAINT "FK_Comments_Posts_PostId" FOREIGN KEY ("PostId") REFERENCES "Posts" ("PostId") ON DELETE CASCADE,
+    CONSTRAINT "FK_Comments_Users_UserId" FOREIGN KEY ("UserId") REFERENCES "Users" ("UserId") ON DELETE CASCADE
+);
+2024-10-03 21:13:19.809 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Comments_PostId" ON "Comments" ("PostId");
+2024-10-03 21:13:19.809 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Comments_UserId" ON "Comments" ("UserId");
+2024-10-03 21:13:19.810 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Posts_UserId" ON "Posts" ("UserId");
+2024-10-03 21:13:19.893 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS "u")
+2024-10-03 21:13:19.952 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 20), @p1='?' (Size = 10), @p2='?' (Size = 107), @p3='?' (Size = 10)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "Name", "ProfileImageUrl", "Username")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "UserId";
+2024-10-03 21:13:19.956 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 16), @p1='?' (Size = 15), @p2='?' (Size = 92), @p3='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "Name", "ProfileImageUrl", "Username")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "UserId";
+2024-10-03 21:13:19.957 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 15), @p1='?' (Size = 15), @p2='?' (Size = 3), @p3='?' (Size = 7)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "Name", "ProfileImageUrl", "Username")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "UserId";
+2024-10-03 21:13:19.961 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Posts" AS "p")
+2024-10-03 21:13:19.974 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 21), @p1='?' (Size = 20), @p2='?' (Size = 22), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Posts" ("Caption", "PostDate", "PostImagePath", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "PostId";
+2024-10-03 21:13:19.975 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 17), @p1='?' (Size = 20), @p2='?' (Size = 17), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Posts" ("Caption", "PostDate", "PostImagePath", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "PostId";
+2024-10-03 21:13:19.975 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 42), @p1='?' (Size = 20), @p2='?' (Size = 18), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Posts" ("Caption", "PostDate", "PostImagePath", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "PostId";
+2024-10-03 21:13:19.976 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Comments" AS "c")
+2024-10-03 21:13:19.981 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 20), @p1='?' (Size = 15), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Comments" ("CommentDate", "CommentText", "PostId", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "CommentId";
+2024-10-03 21:13:19.982 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 20), @p1='?' (Size = 6), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Comments" ("CommentDate", "CommentText", "PostId", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "CommentId";
+2024-10-03 21:13:19.982 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 20), @p1='?' (Size = 21), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Comments" ("CommentDate", "CommentText", "PostId", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "CommentId";
+2024-10-03 21:13:20.015 +02:00 [INF] User profile is available. Using '/Users/axel/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-10-03 21:13:20.038 +02:00 [INF] Now listening on: http://localhost:5127
+2024-10-03 21:13:20.039 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-10-03 21:13:20.039 +02:00 [INF] Hosting environment: Development
+2024-10-03 21:13:20.039 +02:00 [INF] Content root path: /Users/axel/Documents/Skole/friendly
+2024-10-03 21:13:20.856 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Table - null null
+2024-10-03 21:13:20.866 +02:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-10-03 21:13:20.872 +02:00 [INF] Route matched with {action = "Table", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Table() on controller friendly.Controllers.PostController (friendly).
+2024-10-03 21:13:20.924 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+ORDER BY "p"."PostDate" DESC
+2024-10-03 21:13:20.932 +02:00 [INF] Executing ViewResult, running view Table.
+2024-10-03 21:13:20.973 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."UserId", "u"."Email", "u"."Name", "u"."ProfileImageUrl", "u"."Username"
+FROM "Users" AS "u"
+WHERE "u"."UserId" = @__p_0
+LIMIT 1
+2024-10-03 21:13:20.980 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:20.982 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."UserId", "u"."Email", "u"."Name", "u"."ProfileImageUrl", "u"."Username"
+FROM "Users" AS "u"
+WHERE "u"."UserId" = @__p_0
+LIMIT 1
+2024-10-03 21:13:20.985 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:20.986 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:20.995 +02:00 [INF] Executed ViewResult - view Table executed in 62.743ms.
+2024-10-03 21:13:20.995 +02:00 [INF] Executed action friendly.Controllers.PostController.Table (friendly) in 123.5088ms
+2024-10-03 21:13:20.995 +02:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-10-03 21:13:20.998 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Table - 200 null text/html; charset=utf-8 142.2027ms
+2024-10-03 21:13:21.018 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-10-03 21:13:21.019 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-10-03 21:13:21.020 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 1.5807ms
+2024-10-03 21:13:21.020 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.6516ms
+2024-10-03 21:13:21.020 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-10-03 21:13:21.020 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-10-03 21:13:24.439 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Create - null null
+2024-10-03 21:13:24.444 +02:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Create (friendly)'
+2024-10-03 21:13:24.447 +02:00 [INF] Route matched with {action = "Create", controller = "Post"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Create() on controller friendly.Controllers.PostController (friendly).
+2024-10-03 21:13:24.450 +02:00 [INF] Executing ViewResult, running view Create.
+2024-10-03 21:13:24.479 +02:00 [INF] Executed ViewResult - view Create executed in 30.6067ms.
+2024-10-03 21:13:24.479 +02:00 [INF] Executed action friendly.Controllers.PostController.Create (friendly) in 32.0585ms
+2024-10-03 21:13:24.479 +02:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Create (friendly)'
+2024-10-03 21:13:24.479 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Create - 200 null text/html; charset=utf-8 40.6149ms
+2024-10-03 21:13:24.490 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-10-03 21:13:24.490 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-10-03 21:13:24.490 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.2605ms
+2024-10-03 21:13:24.490 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.2605ms
+2024-10-03 21:13:24.490 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-10-03 21:13:24.490 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-10-03 21:13:29.718 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5127/Post/Create - multipart/form-data; boundary=----WebKitFormBoundaryzq3clxAwfq6hxIxg 763786
+2024-10-03 21:13:29.719 +02:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Create (friendly)'
+2024-10-03 21:13:29.737 +02:00 [INF] Route matched with {action = "Create", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Create(friendly.Models.Post, Microsoft.AspNetCore.Http.IFormFile) on controller friendly.Controllers.PostController (friendly).
+2024-10-03 21:13:29.804 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 3), @p1='?' (Size = 20), @p2='?' (Size = 55), @p3='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Posts" ("Caption", "PostDate", "PostImagePath", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "PostId";
+2024-10-03 21:13:29.808 +02:00 [INF] Executing RedirectResult, redirecting to /Post/Table.
+2024-10-03 21:13:29.808 +02:00 [INF] Executed action friendly.Controllers.PostController.Create (friendly) in 70.9892ms
+2024-10-03 21:13:29.808 +02:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Create (friendly)'
+2024-10-03 21:13:29.809 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5127/Post/Create - 302 0 null 90.7615ms
+2024-10-03 21:13:29.814 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Table - null null
+2024-10-03 21:13:29.814 +02:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-10-03 21:13:29.814 +02:00 [INF] Route matched with {action = "Table", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Table() on controller friendly.Controllers.PostController (friendly).
+2024-10-03 21:13:29.815 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+ORDER BY "p"."PostDate" DESC
+2024-10-03 21:13:29.815 +02:00 [INF] Executing ViewResult, running view Table.
+2024-10-03 21:13:29.816 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."UserId", "u"."Email", "u"."Name", "u"."ProfileImageUrl", "u"."Username"
+FROM "Users" AS "u"
+WHERE "u"."UserId" = @__p_0
+LIMIT 1
+2024-10-03 21:13:29.817 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:29.817 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."UserId", "u"."Email", "u"."Name", "u"."ProfileImageUrl", "u"."Username"
+FROM "Users" AS "u"
+WHERE "u"."UserId" = @__p_0
+LIMIT 1
+2024-10-03 21:13:29.817 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:29.818 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:29.818 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:29.819 +02:00 [INF] Executed ViewResult - view Table executed in 3.2541ms.
+2024-10-03 21:13:29.819 +02:00 [INF] Executed action friendly.Controllers.PostController.Table (friendly) in 4.1716ms
+2024-10-03 21:13:29.819 +02:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-10-03 21:13:29.819 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Table - 200 null text/html; charset=utf-8 4.3965ms
+2024-10-03 21:13:29.830 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-10-03 21:13:29.830 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-10-03 21:13:29.831 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.3781ms
+2024-10-03 21:13:29.831 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.3781ms
+2024-10-03 21:13:29.831 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-10-03 21:13:29.831 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-10-03 21:13:29.832 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg - null null
+2024-10-03 21:13:29.852 +02:00 [INF] Sending file. Request path: '/uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg'. Physical path: '/Users/axel/Documents/Skole/friendly/wwwroot/uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg'
+2024-10-03 21:13:29.853 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg - 200 763035 image/jpeg 20.6448ms
+2024-10-03 21:13:35.625 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Grid - null null
+2024-10-03 21:13:35.626 +02:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Grid (friendly)'
+2024-10-03 21:13:35.632 +02:00 [INF] Route matched with {action = "Grid", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Grid() on controller friendly.Controllers.PostController (friendly).
+2024-10-03 21:13:35.636 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+ORDER BY "p"."PostDate" DESC
+2024-10-03 21:13:35.638 +02:00 [INF] Executing ViewResult, running view Grid.
+2024-10-03 21:13:35.649 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."UserId", "u"."Email", "u"."Name", "u"."ProfileImageUrl", "u"."Username"
+FROM "Users" AS "u"
+WHERE "u"."UserId" = @__p_0
+LIMIT 1
+2024-10-03 21:13:35.650 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:35.652 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."UserId", "u"."Email", "u"."Name", "u"."ProfileImageUrl", "u"."Username"
+FROM "Users" AS "u"
+WHERE "u"."UserId" = @__p_0
+LIMIT 1
+2024-10-03 21:13:35.652 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:35.653 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:35.654 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:35.655 +02:00 [INF] Executed ViewResult - view Grid executed in 17.8187ms.
+2024-10-03 21:13:35.655 +02:00 [INF] Executed action friendly.Controllers.PostController.Grid (friendly) in 22.7153ms
+2024-10-03 21:13:35.655 +02:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Grid (friendly)'
+2024-10-03 21:13:35.655 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Grid - 200 null text/html; charset=utf-8 30.2232ms
+2024-10-03 21:13:35.669 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-10-03 21:13:35.669 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-10-03 21:13:35.669 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.6942ms
+2024-10-03 21:13:35.669 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-10-03 21:13:35.669 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.5198ms
+2024-10-03 21:13:35.669 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-10-03 21:13:35.673 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg - null null
+2024-10-03 21:13:35.675 +02:00 [INF] The file /uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg was not modified
+2024-10-03 21:13:35.675 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg - 304 null image/jpeg 1.5677ms
+2024-10-03 21:13:40.528 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Table - null null
+2024-10-03 21:13:40.528 +02:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-10-03 21:13:40.529 +02:00 [INF] Route matched with {action = "Table", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Table() on controller friendly.Controllers.PostController (friendly).
+2024-10-03 21:13:40.531 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+ORDER BY "p"."PostDate" DESC
+2024-10-03 21:13:40.532 +02:00 [INF] Executing ViewResult, running view Table.
+2024-10-03 21:13:40.534 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."UserId", "u"."Email", "u"."Name", "u"."ProfileImageUrl", "u"."Username"
+FROM "Users" AS "u"
+WHERE "u"."UserId" = @__p_0
+LIMIT 1
+2024-10-03 21:13:40.535 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:40.537 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "u"."UserId", "u"."Email", "u"."Name", "u"."ProfileImageUrl", "u"."Username"
+FROM "Users" AS "u"
+WHERE "u"."UserId" = @__p_0
+LIMIT 1
+2024-10-03 21:13:40.537 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:40.538 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:40.539 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-10-03 21:13:40.540 +02:00 [INF] Executed ViewResult - view Table executed in 8.0119ms.
+2024-10-03 21:13:40.540 +02:00 [INF] Executed action friendly.Controllers.PostController.Table (friendly) in 11.5973ms
+2024-10-03 21:13:40.540 +02:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-10-03 21:13:40.540 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Table - 200 null text/html; charset=utf-8 12.9534ms
+2024-10-03 21:13:40.553 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-10-03 21:13:40.553 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg - null null
+2024-10-03 21:13:40.557 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 4.2923ms
+2024-10-03 21:13:40.558 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-10-03 21:13:40.558 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-10-03 21:13:40.559 +02:00 [INF] The file /uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg was not modified
+2024-10-03 21:13:40.560 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 1.2217ms
+2024-10-03 21:13:40.560 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-10-03 21:13:40.560 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/uploads/8f8148d4-068b-448f-bf63-981babdc9936_pizza.jpg - 304 null image/jpeg 7.0704ms

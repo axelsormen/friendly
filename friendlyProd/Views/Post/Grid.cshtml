@@ -1,0 +1,15 @@
+@model friendly.ViewModels.PostsViewModel
+@{
+    ViewData["Title"] = "Posts";
+}
+
+<h1>@ViewData["Title"] (@Model.CurrentViewName View)</h1>
+<a href="/Post/Table" class="btn btn-primary">Table View</a>
+<p><a class="btn btn-secondary" asp-controller="Post" asp-action="Create">Create New Post</a></p>
+
+<div class="row">
+    @foreach (var post in Model.Posts)
+    {
+        <partial name="_PostCard" model="post" />
+    }
+</div>

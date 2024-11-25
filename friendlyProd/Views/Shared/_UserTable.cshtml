@@ -1,0 +1,66 @@
+@model IEnumerable<User>
+
+<div class="container">
+    <table class='table table-striped'>
+        <thead>
+            <tr>
+                <th>Profile Image</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(user.ProfileImageUrl))
+                        {
+                        <img alt="@user.UserName" 
+                            src="@user.ProfileImageUrl" 
+                            class="img-fluid rounded-circle mb-3" 
+                            style="width: 50px; height: 50px; object-fit: cover;" />                        }
+                        else
+                        {
+                        <img alt="No Profile Image" 
+                            src="/uploads/profile-images/defaultprofileimage.jpg" 
+                            class="img-fluid rounded-circle mb-3" 
+                            style="width: 50px; height: 50px; object-fit: cover;" />
+                        }
+                    </td>
+                    <td><strong><a asp-controller="User" asp-action="Details" asp-route-id="@user.Id" class="text-dark">@user.UserName</a></strong></td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(user.FirstName) && !string.IsNullOrEmpty(user.LastName))
+                        {
+                            <p>@user.FirstName @user.LastName</p>
+                        }
+                        else if(!string.IsNullOrEmpty(user.FirstName))
+                        {
+                            <p>@user.FirstName</p>
+                        }
+                        else if(!string.IsNullOrEmpty(user.LastName))
+                        {
+                            <p>@user.LastName</p>
+                        }
+                        else
+                        {
+                            <p><i>Unknown</i></p>
+                        }
+                    </td>
+                    <td>@user.Email</td>
+                    <td>@if (!string.IsNullOrEmpty(user.PhoneNumber))
+                        {
+                            <p>@user.PhoneNumber</p>
+                        }
+                        else
+                        {
+                            <p><i>Missing</i></p>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

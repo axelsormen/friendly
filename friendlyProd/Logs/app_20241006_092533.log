@@ -1,0 +1,21 @@
+2024-10-06 09:25:33.431 +02:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2024-10-06 09:25:33.467 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+2024-10-06 09:25:33.468 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*) FROM "sqlite_master" WHERE "name" = '__EFMigrationsHistory' AND "type" = 'table';
+2024-10-06 09:25:33.469 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2024-10-06 09:25:33.475 +02:00 [INF] Applying migration '20241004135004_IdentityAdded'.
+2024-10-06 09:25:33.497 +02:00 [ERR] Failed executing DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetRoles" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_AspNetRoles" PRIMARY KEY,
+    "Name" TEXT NULL,
+    "NormalizedName" TEXT NULL,
+    "ConcurrencyStamp" TEXT NULL
+);
