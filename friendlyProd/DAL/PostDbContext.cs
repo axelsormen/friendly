@@ -31,13 +31,11 @@ namespace friendly.Models
                 .WithMany(p => p.Comments) // A Post can have many Comments
                 .HasForeignKey(c => c.PostId); // Foreign key is PostId in Comment
                 
-               
             modelBuilder.Entity<Like>()
                 .HasOne(l => l.Post) // Hver Like er knyttet til én Post
                 .WithMany(p => p.Likes) // En Post kan ha mange Likes
                 .HasForeignKey(l => l.PostId); // Fremmednøkkel er PostId i Like
 
-            
             modelBuilder.Entity<Like>()
                 .HasIndex(l => new { l.PostId, l.UserId })
                 .IsUnique();

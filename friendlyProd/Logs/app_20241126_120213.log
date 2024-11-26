@@ -388,3 +388,4 @@ RETURNING "CommentId";
 2024-11-26 12:02:14.328 +01:00 [INF] Application started. Press Ctrl+C to shut down.
 2024-11-26 12:02:14.328 +01:00 [INF] Hosting environment: Development
 2024-11-26 12:02:14.328 +01:00 [INF] Content root path: /Users/axel/Documents/Skole/friendly/friendlyProd
+2024-11-26 12:06:17.623 +01:00 [INF] Application is shutting down...

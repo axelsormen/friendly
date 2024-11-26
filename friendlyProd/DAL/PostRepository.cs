@@ -21,7 +21,6 @@ namespace friendly.DAL
             try
             {
                 return await _db.Posts.OrderByDescending(p => p.PostDate).ToListAsync();
-            
             }
             catch (Exception e)
             {
