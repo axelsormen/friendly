@@ -13,11 +13,11 @@ namespace friendly.Models
         public string? PostImagePath { get; set; }  // Store the image file path
 
         [Required]
-        [StringLength(200)] 
+        [StringLength(200)]
         public string? Caption { get; set; }
 
         [ValidateNever]
-        public string? PostDate { get; set; } 
+        public string? PostDate { get; set; }
 
         // Reference to the IdentityUser's Id
         [ValidateNever]

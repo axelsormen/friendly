@@ -10,6 +10,5 @@ namespace friendly.Models
         public string? LastName { get; set; }
         public string? ProfileImageUrl { get; set; }
         public virtual List<Post>? Posts { get; set; }
-        
     }
 }

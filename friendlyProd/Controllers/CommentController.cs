@@ -65,44 +65,6 @@ public class CommentController : Controller
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> Update(int id)
-    {
-        var comment = await _commentRepository.GetCommentById(id);
-        if (comment == null)
-        {
-            _logger.LogError("[CommentController] Comment not found when updating the CommentId {CommentId:0000}", id);
-            return BadRequest("Comment not found for the CommentId");
-        }
-        return View(comment);
-    }
-
-    [HttpPost]
-    [Authorize]
-    public async Task<IActionResult> Update(Comment comment)
-    {
-        if (ModelState.IsValid)
-        {
-            var originalComment = await _commentRepository.GetCommentById(comment.CommentId);
-            if (originalComment == null)
-            {
-                _logger.LogError("[CommentController] Comment not found when updating the CommentId {CommentId:0000}", comment.CommentId);
-                return BadRequest("Comment not found.");
-            }
-
-            originalComment.CommentText = comment.CommentText;
-
-            bool returnOk = await _commentRepository.Update(originalComment);
-            if (returnOk)
-            {
-                // Redirect back to the same page after successful update
-                return Redirect(Request.Headers["Referer"].ToString());
-            }
-        }
-        return Redirect(Request.Headers["Referer"].ToString());
-    }
-
-    [HttpGet]
-    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         var comment = await _commentRepository.GetCommentById(id);
