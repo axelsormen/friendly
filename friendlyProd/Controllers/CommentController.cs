@@ -5,132 +5,144 @@ using friendly.ViewModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-namespace friendly.Controllers;
 
-public class CommentController : Controller
+namespace friendly.Controllers
 {
-    private readonly ICommentRepository _commentRepository;
-    private readonly ILogger<CommentController> _logger; // Logger for logging errors and info
-    private readonly UserManager<User> _userManager;  // UserManager to access user data
-
-    public CommentController(ICommentRepository commentRepository, ILogger<CommentController> logger, UserManager<User> userManager)
+    public class CommentController : Controller
     {
-        _commentRepository = commentRepository;
-        _logger = logger; // Initialize Logger
-        _userManager = userManager;  // Initialize UserManager
-    }
-    
-    [HttpGet]
-    [Authorize]
-    public IActionResult Create()
-    {
-        _logger.LogInformation("Create GET action called.");
-        return View();
-    }
+        private readonly ICommentRepository _commentRepository; // Repository for interacting with comments
+        private readonly ILogger<CommentController> _logger; // Logger for logging errors and info
+        private readonly UserManager<User> _userManager;  // UserManager to access user data and manage users
 
-    [HttpPost]
-    [Authorize]
-    public async Task<IActionResult> Create(Comment comment)
-    {
-        _logger.LogInformation("Create POST action called with Comment data: {@Comment}", comment);
-
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
+        public CommentController(ICommentRepository commentRepository, ILogger<CommentController> logger, UserManager<User> userManager)
         {
-            _logger.LogError("User not found while creating comment.");
-            return Unauthorized();
+            _commentRepository = commentRepository;
+            _logger = logger; // Initialize logger
+            _userManager = userManager;  // Initialize UserManager to get user details
         }
-
-        comment.UserId = user.Id;
-        comment.CommentDate = DateTime.Now.ToString();
-
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                await _commentRepository.Create(comment);
-                _logger.LogInformation("Comment created successfully with ID: {CommentId}", comment.CommentId);
-                
-                // Redirect back to the same page after successful submission
-                return Redirect(Request.Headers["Referer"].ToString());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while creating the comment.");
-                ModelState.AddModelError("", "An error occurred while saving your comment.");
-            }
-        } 
-        return Redirect(Request.Headers["Referer"].ToString()); // Redirect back to the same page if ModelState is invalid
-    }
-
-    [HttpGet]
-    [Authorize]
-    public async Task<IActionResult> Delete(int id)
-    {
-        _logger.LogInformation("Delete GET action called for CommentId: {CommentId}", id);
         
-        var comment = await _commentRepository.GetCommentById(id);
-        if (comment == null)
+        [HttpGet]
+        [Authorize]  // Only authorized users can create a comment
+        public IActionResult Create()
         {
-            _logger.LogError("[CommentController] Comment not found for CommentId {CommentId}", id);
-            return BadRequest("Comment not found for the CommentId");
+            _logger.LogInformation("Create GET action called.");
+            return View();
         }
 
-        // Ownership check
-        var user = await _userManager.GetUserAsync(User);  // Get the logged-in user
-        if (user == null)
+        [HttpPost]
+        [Authorize]  // Only authorized users can post comments
+        public async Task<IActionResult> Create(Comment comment)
         {
-            _logger.LogError("User not found during delete attempt.");
-            return Unauthorized();
-        }
-        if (comment.UserId != user.Id)  
-        {
-            _logger.LogWarning("User {UserId} attempted to delete comment {CommentId} but does not have ownership.", user.Id, id);
-            return Forbid();  
-        }
+            _logger.LogInformation("Create POST action called with Comment data: {@Comment}", comment);
 
-        _logger.LogInformation("Rendering confirmation view for deleting CommentId: {CommentId}", id);
-        return View(comment);
-    }
+            // Get the currently logged-in user
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                _logger.LogError("User not found while creating comment.");
+                return Unauthorized();
+            }
 
-    [HttpPost]
-    [Authorize]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        _logger.LogInformation("DeleteConfirmed POST action called for CommentId: {CommentId}", id);
+            // Assign the user's ID to the comment and set the current date as the comment's date
+            comment.UserId = user.Id;
+            comment.CommentDate = DateTime.Now.ToString();
 
-        // Retrieve the comment from the repository
-        var comment = await _commentRepository.GetCommentById(id);
-        if (comment == null)
-        {
-            _logger.LogError("[CommentController] Comment not found for CommentId {CommentId}", id);
-            return BadRequest("Comment not found for the CommentId");
-        }
-
-        // Ownership check
-        var user = await _userManager.GetUserAsync(User);  
-        if (user == null)
-        {
-            _logger.LogError("User not found during delete confirmation.");
-            return Unauthorized();
-        }
-
-        if (comment.UserId != user.Id)
-        {
-            _logger.LogWarning("User {UserId} attempted to delete comment {CommentId} but is not the owner.", user.Id, id);
-            return Forbid();  
+            // Check if the model state is valid before proceeding
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Create the comment in the database via the repository
+                    await _commentRepository.Create(comment);
+                    _logger.LogInformation("Comment created successfully with ID: {CommentId}", comment.CommentId);
+                    
+                    // Redirect back to the previous page after successful creation
+                    return Redirect(Request.Headers["Referer"].ToString());
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred while creating the comment.");
+                    ModelState.AddModelError("", "An error occurred while saving your comment.");
+                }
+            }
+            return Redirect(Request.Headers["Referer"].ToString()); // If ModelState is invalid, redirect back
         }
 
-        bool returnOk = await _commentRepository.Delete(id);
-        if (!returnOk)
+        [HttpGet]
+        [Authorize]  // Only authorized users can attempt to delete comments
+        public async Task<IActionResult> Delete(int id)
         {
-            _logger.LogError("[CommentController] Comment deletion failed for CommentId {CommentId}", id);
-            return BadRequest("Comment deletion failed");
+            _logger.LogInformation("Delete GET action called for CommentId: {CommentId}", id);
+            
+            // Retrieve the comment to be deleted from the repository
+            var comment = await _commentRepository.GetCommentById(id);
+            if (comment == null)
+            {
+                _logger.LogError("[CommentController] Comment not found for CommentId {CommentId}", id);
+                return BadRequest("Comment not found for the CommentId");
+            }
+
+            // Get the currently logged-in user
+            var user = await _userManager.GetUserAsync(User);  
+            if (user == null)
+            {
+                _logger.LogError("User not found during delete attempt.");
+                return Unauthorized(); // Return Unauthorized if user is not found
+            }
+
+            // Check if the logged-in user owns the comment (only the owner can delete it)
+            if (comment.UserId != user.Id)  
+            {
+                _logger.LogWarning("User {UserId} attempted to delete comment {CommentId} but does not have ownership.", user.Id, id);
+                return Forbid();  
+            }
+
+            // Render the confirmation view for deletion
+            _logger.LogInformation("Rendering confirmation view for deleting CommentId: {CommentId}", id);
+            return View(comment);
         }
 
-        _logger.LogInformation("Successfully deleted CommentId: {CommentId}", id);
+        [HttpPost]
+        [Authorize]  // Only authorized users can delete comments
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            _logger.LogInformation("DeleteConfirmed POST action called for CommentId: {CommentId}", id);
 
-        // Redirect back to the origin page after successful deletion
-        return Redirect(Request.Headers["Referer"].ToString());
+            // Retrieve the comment to be deleted from the repository
+            var comment = await _commentRepository.GetCommentById(id);
+            if (comment == null)
+            {
+                _logger.LogError("[CommentController] Comment not found for CommentId {CommentId}", id);
+                return BadRequest("Comment not found for the CommentId");
+            }
+
+            // Get the currently logged-in user
+            var user = await _userManager.GetUserAsync(User);  
+            if (user == null)
+            {
+                _logger.LogError("User not found during delete confirmation.");
+                return Unauthorized(); // Return Unauthorized if user is not found
+            }
+
+            // Check if the logged-in user owns the comment (only the owner can delete it)
+            if (comment.UserId != user.Id)
+            {
+                _logger.LogWarning("User {UserId} attempted to delete comment {CommentId} but is not the owner.", user.Id, id);
+                return Forbid();  
+            }
+
+            // Attempt to delete the comment through the repository
+            bool returnOk = await _commentRepository.Delete(id);
+            if (!returnOk)
+            {
+                _logger.LogError("[CommentController] Comment deletion failed for CommentId {CommentId}", id);
+                return BadRequest("Comment deletion failed");
+            }
+
+            _logger.LogInformation("Successfully deleted CommentId: {CommentId}", id);
+
+            // Redirect back to the previous page after successful deletion
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 }

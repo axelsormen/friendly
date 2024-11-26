@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "yDonSA2xwbqggr9O+YzeI1V0yf2AP9UnVzaBdBYLV+Q=",
+  "Hash": "axDgzOuvXBV/2wAEvbZltiP7ORgkZyVk7Wd/oIIb0rM=",
   "Source": "friendly",
   "BasePath": "_content/friendly",
   "Mode": "Default",
@@ -1746,6 +1746,25 @@
       "OriginalItemSpec": "wwwroot/uploads/5185852d-dc74-4c34-8445-a1a9e5018785_pizza.jpg"
     },
     {
+      "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/5bb2485b-03dd-4b1c-849f-207acb37fbaf_Terminal.png",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/5bb2485b-03dd-4b1c-849f-207acb37fbaf_Terminal.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/5bb2485b-03dd-4b1c-849f-207acb37fbaf_Terminal.png"
+    },
+    {
       "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/60478c65-c3ed-4c3e-b54a-3ba0be893504_pizza.jpg",
       "SourceId": "friendly",
       "SourceType": "Discovered",
@@ -1896,6 +1915,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/uploads/75293097-b096-455f-882a-20c36c52a976_profileimage2.jpeg"
+    },
+    {
+      "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/76b080f0-12d0-42eb-9d08-d406c7dd2fba_Terminal.png",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/76b080f0-12d0-42eb-9d08-d406c7dd2fba_Terminal.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/76b080f0-12d0-42eb-9d08-d406c7dd2fba_Terminal.png"
     },
     {
       "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/86913c58-0edc-4c5e-bb71-7e6fbca268d9_pizza.jpg",
