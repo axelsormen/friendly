@@ -3,7 +3,6 @@ using friendly.DAL;
 using friendly.Models;
 using Microsoft.AspNetCore.Authorization;
 
-
 namespace friendly.Controllers
 {
     public class LikeController : Controller
@@ -51,9 +50,7 @@ namespace friendly.Controllers
 
         [HttpPost]
         [Authorize]
-        
         public async Task<IActionResult> DeleteConfirmed(int postId, string userId)
-        
         {
             bool returnOk = await _likeRepository.DeleteByPostAndUser(postId, userId);
             if (!returnOk)
@@ -64,17 +61,15 @@ namespace friendly.Controllers
                 
             }
             return Ok();
-
         }
+
         [HttpGet]
         [Authorize]
-        
         public async Task<IActionResult> GetLikesCount(int postId)
         {
             var count = await _likeRepository.GetLikesCount(postId);
             return Ok(count);
         }
-
     }
 }
 

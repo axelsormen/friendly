@@ -122,9 +122,17 @@ namespace friendly.Tests.Controllers
         {
             // Arrange
             var post = new Post { PostId = 1, Caption = "Updated Post", PostDate = "2024-01-01", UserId = "User1" };
+            
             _mockPostRepository.Setup(repo => repo.GetPostById(post.PostId)).ReturnsAsync(post);
             _mockPostRepository.Setup(repo => repo.Update(post)).ReturnsAsync(true);
-            var controller = new PostController(_mockPostRepository.Object, _mockLogger.Object, null);
+
+            var mockUserStore = new Mock<IUserStore<User>>();
+            var mockUserManager = new Mock<UserManager<User>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+
+            var user = new User { Id = "User1", UserName = "TestUser" };
+            mockUserManager.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+
+            var controller = new PostController(_mockPostRepository.Object, _mockLogger.Object, mockUserManager.Object);
 
             // Act
             var result = await controller.Update(post);
@@ -156,16 +164,35 @@ namespace friendly.Tests.Controllers
         public async Task Delete_PostExists_ReturnsView()
         {
             // Arrange
-            var post = new Post { PostId = 1, Caption = "Post to Delete", PostDate = "2024-01-01", UserId = "User1" };
-            _mockPostRepository.Setup(repo => repo.GetPostById(post.PostId)).ReturnsAsync(post);
-            var controller = new PostController(_mockPostRepository.Object, _mockLogger.Object, null);
+            var postId = 1;
+            var post = new Post { PostId = postId, UserId = "User1", Caption = "To Be Deleted" };
+            _mockPostRepository.Setup(repo => repo.GetPostById(postId)).ReturnsAsync(post);
+
+            var mockUserStore = new Mock<IUserStore<User>>();
+            var mockUserManager = new Mock<UserManager<User>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            mockUserManager.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new User { Id = "User1" });
+
+            var mockUser = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "User1"),
+                new Claim(ClaimTypes.Name, "TestUser")
+            }, "mock"));
+
+            var controller = new PostController(_mockPostRepository.Object, _mockLogger.Object, mockUserManager.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext { User = mockUser }
+                }
+            };
 
             // Act
-            var result = await controller.Delete(post.PostId);
+            var result = await controller.Delete(postId);
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal(post, viewResult.Model);
+            var model = Assert.IsType<Post>(viewResult.Model);
+            Assert.Equal(postId, model.PostId);
         }
 
         // Negative test: Try deleting a non-existing post (error handling)
@@ -188,16 +215,28 @@ namespace friendly.Tests.Controllers
         public async Task DeleteConfirmed_ValidPost_RedirectsToTable()
         {
             // Arrange
-            var post = new Post { PostId = 1, Caption = "Post to Delete", PostDate = "2024-01-01", UserId = "User1" };
             var postId = 1;
-
-            // Mock GetPostById to return the post
+            var post = new Post { PostId = postId, UserId = "User1" };
             _mockPostRepository.Setup(repo => repo.GetPostById(postId)).ReturnsAsync(post);
-            
-            // Mock Delete to return true (indicating the post was successfully deleted)
             _mockPostRepository.Setup(repo => repo.Delete(postId)).ReturnsAsync(true);
-            
-            var controller = new PostController(_mockPostRepository.Object, _mockLogger.Object, null);
+
+            var mockUserStore = new Mock<IUserStore<User>>();
+            var mockUserManager = new Mock<UserManager<User>>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+            mockUserManager.Setup(um => um.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(new User { Id = "User1" });
+
+            var mockUser = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "User1"),
+                new Claim(ClaimTypes.Name, "TestUser")
+            }, "mock"));
+
+            var controller = new PostController(_mockPostRepository.Object, _mockLogger.Object, mockUserManager.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext { User = mockUser }
+                }
+            };
 
             // Act
             var result = await controller.DeleteConfirmed(postId);
