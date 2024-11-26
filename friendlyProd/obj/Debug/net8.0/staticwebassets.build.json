@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "hQgBISaGh+Kkt9WuZL4WtEY8KtrEmkYfk5by8gmr/6k=",
+  "Hash": "C5Qqv2rp61QbM4diSGFYJI2tA4UXrCZVl/5/3pSrwK4=",
   "Source": "friendly",
   "BasePath": "_content/friendly",
   "Mode": "Default",
@@ -2181,6 +2181,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/uploads/bf2fd512-9e09-4801-ad08-6a2a4d190482_fishandchips.jpg"
+    },
+    {
+      "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/c11be423-7f6a-4817-a586-8b5294fa1686_Nettside.png",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/c11be423-7f6a-4817-a586-8b5294fa1686_Nettside.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/c11be423-7f6a-4817-a586-8b5294fa1686_Nettside.png"
     },
     {
       "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/c5ff7cf6-a071-4155-af9c-fdfcb55fe464_profileimage2.jpeg",

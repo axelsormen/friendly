@@ -1,5 +1,7 @@
 @using System.Security.Claims
 @using friendly.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 
 <style>
     .like-buttons {
@@ -41,6 +43,9 @@
 </style>
 
 <table class="table table-striped">
+     @{
+        var currentUser = await UserManager.GetUserAsync(User);
+    }
     @foreach (var post in Model)
     {
         var heartClass = ((List<Like>)post.Likes).Any(l => l.UserId == User.FindFirst(ClaimTypes.NameIdentifier)?.Value) ? "fas" : "far";
@@ -98,8 +103,11 @@
                             </p>
 
                             <div id="actions-@post.PostId" class="mt-3">
+                                @if (currentUser != null && post.UserId == currentUser.Id)
+                                {
                                 <a asp-action="Update" asp-route-id="@post.PostId" class="btn btn-primary btn-sm">Edit Caption</a>
                                 <a asp-action="Delete" asp-route-id="@post.PostId" class="btn btn-danger btn-sm">Delete Post</a>
+                                }
                             </div>
                         </div>
 
@@ -125,10 +133,14 @@
                                                         <small class="text-muted">(@comment.CommentDate)</small>
                                                     </p>
 
+                                                    <!-- Check if the logged-in user is the owner of the comment -->
+                                                    @if (currentUser != null && comment.UserId == currentUser.Id)
+                                                    {
                                                     <!-- Delete comment button on the same line -->
                                                     <form asp-controller="Comment" asp-action="DeleteConfirmed" asp-route-id="@comment.CommentId" class="d-inline">
                                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                                     </form>
+                                                    }
                                                 </div>
                                             </li>
                                         }

@@ -73,6 +73,13 @@ public class CommentController : Controller
             _logger.LogError("[CommentController] Comment not found for the CommentId {CommentId:0000}", id);
             return BadRequest("Comment not found for the CommentId");
         }
+
+        //Ownership check
+        var user = await _userManager.GetUserAsync(User);  // Get the logged-in user
+        if (comment.UserId != user.Id)  
+        {
+            return Forbid();  
+        }
         return View(comment);
     }
 
@@ -80,12 +87,29 @@ public class CommentController : Controller
     [Authorize]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
+
+        // Retrieve the comment from the repository
+        var comment = await _commentRepository.GetCommentById(id);
+        if (comment == null)
+        {
+            _logger.LogError("[CommentController] Comment not found for deletion, CommentId {CommentId:0000}", id);
+            return BadRequest("Comment not found for deletion.");
+        }
+
+        // Ownership check
+        var user = await _userManager.GetUserAsync(User);  
+        if (comment.UserId != user.Id)  
+        {
+            return Forbid();  
+        }
+
         bool returnOk = await _commentRepository.Delete(id);
         if(!returnOk)
         {
             _logger.LogError("[CommentController] Comment deletion failed for the CommentId {CommentId:0000}", id);
             return BadRequest("Comment deletion failed");
         }
+
         return Redirect(Request.Headers["Referer"].ToString());
     }
 }
