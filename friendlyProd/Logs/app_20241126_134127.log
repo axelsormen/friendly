@@ -789,3 +789,4 @@ FROM "AspNetUsers" AS "a"
 2024-11-26 13:41:40.791 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.8869ms
 2024-11-26 13:41:40.791 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
 2024-11-26 13:41:40.791 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 13:50:08.633 +01:00 [INF] Application is shutting down...
