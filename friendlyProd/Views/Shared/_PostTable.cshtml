@@ -4,93 +4,97 @@
 @inject UserManager<User> UserManager
 
 <style>
+    /* Styles for the like and unlike button functionality */
     .like-buttons {
-    display: flex;
-    align-items: center; /* Center items vertically */
-}
+        display: flex;
+        align-items: center; /* Center items vertically */
+    }
 
-  button.like-button,
-  button.unlike-button {
-      background: transparent;
-      border: none;
-      outline: none;
-      box-shadow: none;
-      padding: 0; /* Ensures there is no internal padding */
-      cursor: pointer; /* Makes sure the button behaves like a button */
-  }
+    button.like-button,
+    button.unlike-button {
+        background: transparent; /* Makes the button visually blend with the background */
+        border: none; /* Removes border styling */
+        outline: none;
+        box-shadow: none;
+        padding: 0; /* Ensures there is no internal padding */
+        cursor: pointer; /* Makes the button interactive */
+    }
 
-  button.like-button i,
-  button.unlike-button i {
-      font-size: 25px; /* Adjust icon size as needed */
-      padding: 0; /* Removes any internal padding */
-      margin-right: 10px; /* Adjust spacing */
-  }
+    button.like-button i,
+    button.unlike-button i {
+        font-size: 25px; /* Adjust icon size for visibility */
+        padding: 0; /* Removes extra padding around icons */
+        margin-right: 10px; /* Adds spacing between icon and text */
+    }
 
-  button.unlike-button i {
-      color: red; /* Sets the icon color */
-  }
+    button.unlike-button i {
+        color: red; /* Indicates the unlike button visually */
+    }
 
-  /* Remove focus outline for accessibility if desired */
-  button:focus {
-      outline: none;
-  }
+    button:focus {
+        outline: none; /* Removes the focus outline for aesthetic purposes */
+    }
 
-  .likes-count {
-      font-size: 16px; /* Adjust the font size as needed */
-      display: inline-block; /* Ensure it's treated as a block to help with spacing */
-      vertical-align: middle; /* Align with the center of the buttons */
-  }
+    .likes-count {
+        font-size: 16px; /* Font size for the likes count display */
+        display: inline-block; /* Ensures proper alignment with buttons */
+        vertical-align: middle; /* Aligns text with icons */
+    }
 </style>
 
 <table class="table table-striped">
-     @{
-        var currentUser = await UserManager.GetUserAsync(User);
+    @{
+        var currentUser = await UserManager.GetUserAsync(User); // Get the currently logged-in user
     }
-    @foreach (var post in Model)
+    @foreach (var post in Model) // Iterate through each post in the model
     {
+        // Determine if the current user has liked the post; change the heart icon accordingly
         var heartClass = ((List<Like>)post.Likes).Any(l => l.UserId == User.FindFirst(ClaimTypes.NameIdentifier)?.Value) ? "fas" : "far";
 
         <tr>
             <td colspan="5">
-                <!-- Container to encapsulate the row structure for alignment -->
+                <!-- Encapsulate the post structure for alignment and layout -->
                 <div class="container">
                     <div class="row align-items-start">
-                        <!-- Column for the image and post content -->
+                        <!-- Left column for post image and like functionality -->
                         <div class="col-md-6">
+                            <!-- Display the post image -->
                             <img src="@post.PostImagePath" alt="Post Image" class="img-fluid" style="height: 400px; object-fit: cover;" />
 
-                            <!-- Toggle button for Like/Unlike actions moved to the right -->
+                            <!-- Like/Unlike functionality -->
                             <div class="like-buttons">
                                 <button class="like-button" data-post-id="@post.PostId" data-user-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" style="display: @(heartClass == "fas" ? "none" : "block")">
-                                    <i class="@heartClass fa-heart"></i>
+                                    <i class="@heartClass fa-heart"></i> <!-- Icon changes based on whether the post is liked -->
                                 </button>
                                 <button class="unlike-button" data-post-id="@post.PostId" data-user-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" style="display: @(heartClass == "fas" ? "block" : "none")">
                                     <i class="fas fa-heart"></i>
                                 </button>
-                                <span id="likes-count-@post.PostId">@post.Likes.Count Likes</span> <!-- Display initial count of likes -->
+                                <!-- Display the current number of likes -->
+                                <span id="likes-count-@post.PostId">@post.Likes.Count Likes</span>
                             </div>
-                            
-                            <!-- Post caption and button row -->
+
+                            <!-- Post caption -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center mb-3">
+                                    <!-- User profile image -->
                                     @if (post.User != null && !string.IsNullOrEmpty(post.User.ProfileImageUrl))
                                     {
                                         <img alt="@post.User.UserName" 
                                             src="@post.User.ProfileImageUrl" 
                                             class="img-fluid rounded-circle" 
-                                            style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />                        
+                                            style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" /> <!-- Display user's profile image -->                       
                                     }
                                     else
                                     {
                                         <img alt="No Profile Image" 
                                             src="/uploads/profile-images/defaultprofileimage.jpg" 
                                             class="img-fluid rounded-circle" 
-                                            style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
+                                            style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" /> <!-- Display a default profile image -->
                                     }
                                     <div>
                                         <strong>
                                             <a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" class="text-dark" style="text-decoration: none; font-size: 1.1rem;">
-                                                @post.User.UserName
+                                                @post.User.UserName <!-- Link to the user's profile -->
                                             </a>
                                         </strong>
                                         <span class="text-muted" style="margin-left: 5px;">@post.Caption</span>
@@ -98,48 +102,50 @@
                                 </div>
                             </div>
 
+                            <!-- Post creation date -->
                             <p>
                                 <small class="text-muted">@post.PostDate</small>
                             </p>
 
+                            <!-- Edit/Delete actions visible only to the post owner -->
                             <div id="actions-@post.PostId" class="mt-3">
                                 @if (currentUser != null && post.UserId == currentUser.Id)
                                 {
-                                <a asp-action="Update" asp-route-id="@post.PostId" class="btn btn-primary btn-sm">Edit Caption</a>
-                                <a asp-action="Delete" asp-route-id="@post.PostId" class="btn btn-danger btn-sm">Delete Post</a>
+                                    <a asp-action="Update" asp-route-id="@post.PostId" class="btn btn-primary btn-sm">Edit Caption</a>
+                                    <a asp-action="Delete" asp-route-id="@post.PostId" class="btn btn-danger btn-sm">Delete Post</a>
                                 }
                             </div>
                         </div>
 
-                        <!-- Column for comments and replies -->
+                        <!-- Right column for comments -->
                         <div class="col-md-6">
-                            <!-- Display existing comments -->
+                            <!-- Display comments if available -->
                             <div>
                                 @if (post.Comments != null && post.Comments.Count > 0)
                                 {
-                                    <ul style="list-style-type:none; padding-left:0;">
+                                    <ul style="list-style-type:none; padding-left:0;"> <!-- Unordered list without bullet points -->
                                         @foreach (var comment in post.Comments)
                                         {
                                             <li class="mb-2">
                                                 <div class="d-flex justify-content-between align-items-center">
+                                                    <!-- Comment content -->
                                                     <p class="mb-0">
                                                         <strong>
                                                             <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" 
                                                                 class="text-dark" style="text-decoration: none;">
-                                                                @comment.User.UserName
+                                                                @comment.User.UserName <!-- Display comment author -->
                                                             </a>                                                    
                                                         </strong>
-                                                        <span>@comment.CommentText</span>
-                                                        <small class="text-muted">(@comment.CommentDate)</small>
+                                                        <span>@comment.CommentText</span> <!-- Comment text -->
+                                                        <small class="text-muted">(@comment.CommentDate)</small> <!-- Comment date -->
                                                     </p>
 
-                                                    <!-- Check if the logged-in user is the owner of the comment -->
+                                                    <!-- Delete button for comment, visible only to its author -->
                                                     @if (currentUser != null && comment.UserId == currentUser.Id)
                                                     {
-                                                    <!-- Delete comment button on the same line -->
-                                                    <form asp-controller="Comment" asp-action="DeleteConfirmed" asp-route-id="@comment.CommentId" class="d-inline">
-                                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                                    </form>
+                                                        <form asp-controller="Comment" asp-action="DeleteConfirmed" asp-route-id="@comment.CommentId" class="d-inline">
+                                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                        </form>
                                                     }
                                                 </div>
                                             </li>
@@ -152,11 +158,11 @@
                                 }
                             </div>
 
-                            <!-- Comment input field for the post -->
+                            <!-- Comment submission form -->
                             <div class="mt-3">
                                 <form asp-controller="Comment" asp-action="Create" method="post">
-                                    <input type="hidden" name="PostId" value="@post.PostId" />
-                                    <textarea class="form-control" name="CommentText" rows="2" placeholder="Write a comment..."></textarea>
+                                    <input type="hidden" name="PostId" value="@post.PostId" /> <!-- Hidden input for post ID -->
+                                    <textarea class="form-control" name="CommentText" rows="2" placeholder="Write a comment..."></textarea> <!-- Input field for new comments -->
                                     <div class="d-flex justify-content-end mt-2">
                                         <button type="submit" class="btn btn-secondary btn-sm">Post Comment</button>
                                     </div>
@@ -168,7 +174,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="5" style="height:20px;"></td>
+            <td colspan="5" style="height:20px;"></td> <!-- Spacing row between posts -->
         </tr>
     }
 </table>
