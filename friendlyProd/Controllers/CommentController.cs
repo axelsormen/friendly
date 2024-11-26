@@ -10,13 +10,13 @@ namespace friendly.Controllers;
 public class CommentController : Controller
 {
     private readonly ICommentRepository _commentRepository;
-    private readonly ILogger<CommentController> _logger;
+    private readonly ILogger<CommentController> _logger; // Add Logger to log errors
     private readonly UserManager<User> _userManager;  // Add UserManager to access user data
 
     public CommentController(ICommentRepository commentRepository, ILogger<CommentController> logger, UserManager<User> userManager)
     {
         _commentRepository = commentRepository;
-        _logger = logger;
+        _logger = logger; // Initialize Logger
         _userManager = userManager;  // Initialize UserManager
     }
     
@@ -41,8 +41,8 @@ public class CommentController : Controller
             return Unauthorized();
         }
 
-        comment.UserId = user.Id; // Set the UserId
-        comment.CommentDate = DateTime.Now.ToString();
+        comment.UserId = user.Id;
+        comment.CommentDate = DateTime.Now.ToString(); 
 
         if (ModelState.IsValid)
         {
@@ -59,8 +59,8 @@ public class CommentController : Controller
                 _logger.LogError(ex, "An error occurred while creating the comment.");
                 ModelState.AddModelError("", "An error occurred while saving your comment.");
             }
-        }  
-        return Redirect(Request.Headers["Referer"].ToString());
+        } 
+        return Redirect(Request.Headers["Referer"].ToString()); // Redirect back to the same page
     }
 
     [HttpGet]
@@ -76,10 +76,17 @@ public class CommentController : Controller
 
         //Ownership check
         var user = await _userManager.GetUserAsync(User);  // Get the logged-in user
+        if (user == null)
+        {
+            _logger.LogError("User not found.");
+            return Unauthorized();
+        }
         if (comment.UserId != user.Id)  
         {
             return Forbid();  
         }
+
+        // Redirect Comment view for confirmation
         return View(comment);
     }
 
@@ -92,13 +99,19 @@ public class CommentController : Controller
         var comment = await _commentRepository.GetCommentById(id);
         if (comment == null)
         {
-            _logger.LogError("[CommentController] Comment not found for deletion, CommentId {CommentId:0000}", id);
-            return BadRequest("Comment not found for deletion.");
+            _logger.LogError("[CommentController] Comment not found for the CommentId {CommentId:0000}", id);
+            return BadRequest("Comment not found for the CommentId");
         }
 
         // Ownership check
         var user = await _userManager.GetUserAsync(User);  
-        if (comment.UserId != user.Id)  
+        if (user == null)
+        {
+            _logger.LogError("User not found.");
+            return Unauthorized();
+        }
+
+        if (comment.UserId != user.Id)
         {
             return Forbid();  
         }
@@ -110,6 +123,7 @@ public class CommentController : Controller
             return BadRequest("Comment deletion failed");
         }
 
+        // Redirect back to the origin page
         return Redirect(Request.Headers["Referer"].ToString());
     }
 }

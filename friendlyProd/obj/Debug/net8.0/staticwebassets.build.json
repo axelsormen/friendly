@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "CO/XBWt4561h2JUvYbCttqtnyGBren0CcA6ApSMi9eg=",
+  "Hash": "EX1LdavmYyjQ2/EdiolT+DYjsSGtsZK9JEoz0MuLxSc=",
   "Source": "friendly",
   "BasePath": "_content/friendly",
   "Mode": "Default",
@@ -1212,25 +1212,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/images/beach.jpg"
-    },
-    {
-      "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/images/dots.png",
-      "SourceId": "friendly",
-      "SourceType": "Discovered",
-      "ContentRoot": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/",
-      "BasePath": "_content/friendly",
-      "RelativePath": "images/dots.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/dots.png"
     },
     {
       "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/images/fall.jpg",

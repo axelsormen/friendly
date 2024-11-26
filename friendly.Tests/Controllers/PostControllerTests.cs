@@ -28,13 +28,21 @@ namespace friendly.Tests.Controllers
 
         // Positive test: Verify posts are returned from the Table view
         [Fact]
-        public async Task Table_ReturnsViewWithPosts()
+        public async Task TableReturnsViewWithPosts()
         {
             // Arrange
             var postList = new List<Post>
             {
-                new Post { PostId = 1, Caption = "Test 1", PostDate = "2024-01-01", UserId = "User1" },
-                new Post { PostId = 2, Caption = "Test 2", PostDate = "2024-01-02", UserId = "User2" }
+                new Post { 
+                    PostId = 1, 
+                    Caption = "Test 1", 
+                    PostDate = "2024-01-01", 
+                    UserId = "User1" },
+                new Post { 
+                    PostId = 2, 
+                    Caption = "Test 2", 
+                    PostDate = "2024-01-02", 
+                    UserId = "User2" }
             };
             _mockPostRepository.Setup(repo => repo.GetAll()).ReturnsAsync(postList);
             var controller = new PostController(_mockPostRepository.Object, _mockLogger.Object, null);
@@ -50,7 +58,7 @@ namespace friendly.Tests.Controllers
 
         // Negative test: When there are no posts, the view should still return with an empty list or message.
         [Fact]
-        public async Task Table_ReturnsViewWithEmptyListWhenNoPosts()
+        public async Task TableReturnsViewWithNoPosts()
         {
             // Arrange
             _mockPostRepository.Setup(repo => repo.GetAll()).ReturnsAsync(new List<Post>());
@@ -67,7 +75,7 @@ namespace friendly.Tests.Controllers
 
         // Positive test: Check if new post is created and redirected
         [Fact]
-        public async Task Create_Post_ValidData_RedirectsToTable()
+        public async Task CreatePostValidData()
         {
             // Arrange
             var post = new Post { PostId = 1, Caption = "New Post", PostDate = "2024-01-01", UserId = "User1" };
@@ -96,7 +104,7 @@ namespace friendly.Tests.Controllers
 
         // Negative test: Invalid post creation, should return view with errors
         [Fact]
-        public async Task Create_Post_InvalidData_ReturnsViewWithModelErrors()
+        public async Task CreatePostInvalidData()
         {
             // Arrange
             var mockUserManager = new Mock<UserManager<User>>(new Mock<IUserStore<User>>().Object, null, null, null, null, null, null, null, null);
@@ -118,7 +126,7 @@ namespace friendly.Tests.Controllers
 
         // Positive test: Valid post update and redirection
         [Fact]
-        public async Task Update_ValidPost_RedirectsToTable()
+        public async Task UpdateValidPost()
         {
             // Arrange
             var post = new Post { PostId = 1, Caption = "Updated Post", PostDate = "2024-01-01", UserId = "User1" };
@@ -144,7 +152,7 @@ namespace friendly.Tests.Controllers
 
         // Negative test: Invalid update (empty caption), should return view with validation errors
         [Fact]
-        public async Task Update_InvalidPost_ReturnsViewWithModelError()
+        public async Task UpdateInvalidPost()
         {
             // Arrange
             var post = new Post { PostId = 1, Caption = "", PostDate = "2024-01-01", UserId = "User1" }; // Invalid data
@@ -161,7 +169,7 @@ namespace friendly.Tests.Controllers
 
         // Positive test: Delete an existing post
         [Fact]
-        public async Task Delete_PostExists_ReturnsView()
+        public async Task DeletePostExists()
         {
             // Arrange
             var postId = 1;
@@ -197,7 +205,7 @@ namespace friendly.Tests.Controllers
 
         // Negative test: Try deleting a non-existing post (error handling)
         [Fact]
-        public async Task Delete_PostNotFound_ReturnsNotFound()
+        public async Task DeletePostNotFound()
         {
             // Arrange
             _mockPostRepository.Setup(repo => repo.GetPostById(It.IsAny<int>())).ReturnsAsync((Post)null);
@@ -212,7 +220,7 @@ namespace friendly.Tests.Controllers
 
         // Positive test: Successfully delete a post
         [Fact]
-        public async Task DeleteConfirmed_ValidPost_RedirectsToTable()
+        public async Task DeleteConfirmedValidPost()
         {
             // Arrange
             var postId = 1;
@@ -248,7 +256,7 @@ namespace friendly.Tests.Controllers
 
         // Negative test: Try deleting a post that doesn't exist
         [Fact]
-        public async Task DeleteConfirmed_PostNotFound_ReturnsNotFound()
+        public async Task DeleteConfirmedPostNotFound()
         {
             // Arrange
             var postId = 999;

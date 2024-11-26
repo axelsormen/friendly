@@ -31,7 +31,7 @@ namespace friendly.Areas.Identity.Pages.Account.Manage
         public string ProfileImageUrl { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public virtual List<Post>? Posts { get; set; }
+        public virtual List<Post> Posts { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }

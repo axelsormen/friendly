@@ -9,24 +9,32 @@
         <div class="card-body">
             <!-- User Profile, Caption, and Options Button -->
             <div class="d-flex align-items-center mb-3">
-                 @if (!string.IsNullOrEmpty(Model.User.ProfileImageUrl))
-                    {
+                @if (Model.User != null && !string.IsNullOrEmpty(Model.User.ProfileImageUrl))
+                {
                     <img alt="@Model.User.UserName" 
-                        src="@Model.User.ProfileImageUrl" 
-                        class="img-fluid rounded-circle" 
-                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />                        }
-                    else
-                    {
+                         src="@Model.User.ProfileImageUrl" 
+                         class="img-fluid rounded-circle" 
+                         style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
+                }
+                else
+                {
                     <img alt="No Profile Image" 
-                        src="/uploads/profile-images/defaultprofileimage.jpg" 
-                        class="img-fluid rounded-circle" 
-                        style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
-                    }
-               <div>
+                         src="/uploads/profile-images/defaultprofileimage.jpg" 
+                         class="img-fluid rounded-circle" 
+                         style="width: 35px; height: 35px; object-fit: cover; margin-right: 10px;" />
+                }
+                <div>
                     <strong>
-                        <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserId" class="text-dark" style="text-decoration: none; font-size: 1.1rem;">
-                            @Model.User.UserName
-                        </a>
+                        @if (Model.User != null)
+                        {
+                            <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserId" class="text-dark" style="text-decoration: none; font-size: 1.1rem;">
+                                @Model.User.UserName
+                            </a>
+                        }
+                        else
+                        {
+                            <span>Unknown User</span>
+                        }
                     </strong>
                     <span class="text-muted" style="margin-left: 5px;">@Model.Caption</span>
                 </div>        
@@ -47,10 +55,17 @@
                             <li class="mb-1">
                                 <strong>
                                     <!-- Link to the user details for the comment, without underline -->
-                                    <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" 
-                                       class="text-dark" style="text-decoration: none;">
-                                       @comment.User.UserName
-                                    </a>
+                                    @if (comment.User != null)
+                                    {
+                                        <a asp-controller="User" asp-action="Details" asp-route-id="@comment.UserId" 
+                                           class="text-dark" style="text-decoration: none;">
+                                           @comment.User.UserName
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>Unknown User</span>
+                                    }
                                 </strong>
                                 <span>@comment.CommentText</span>
                                 <small class="text-muted"> (@comment.CommentDate)</small>

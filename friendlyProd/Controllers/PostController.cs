@@ -11,13 +11,13 @@ namespace friendly.Controllers;
 public class PostController : Controller
 {
     private readonly IPostRepository _postRepository;
-    private readonly ILogger<PostController> _logger;
-    private readonly UserManager<User> _userManager;  // Add UserManager to access user data
+    private readonly ILogger<PostController> _logger; // Add Logger to log errors
+    private readonly UserManager<User> _userManager; // Add UserManager to access user data
 
     public PostController(IPostRepository postRepository, ILogger<PostController> logger, UserManager<User> userManager)
     {
         _postRepository = postRepository;
-        _logger = logger;
+        _logger = logger; // Initialize Logger
         _userManager = userManager;  // Initialize UserManager
     }
 
@@ -163,8 +163,13 @@ public class PostController : Controller
             return BadRequest("Post not found for the PostId");
         }
 
-        // Ownership check:
-        var user = await _userManager.GetUserAsync(User);
+        // Ownership check
+        var user = await _userManager.GetUserAsync(User); // Get the logged-in user
+        if (user == null)
+        {
+            return Unauthorized("User is not logged in.");
+        }
+
         if (post.UserId != user.Id)
         {                
             return Forbid();  // 403 Forbidden if user is not the owner
@@ -179,11 +184,22 @@ public class PostController : Controller
         if (ModelState.IsValid)
         {
             var originalPost = await _postRepository.GetPostById(post.PostId);
-            // Ownership check: Ensure that only the owner can update
+            // Ownership check
             var user = await _userManager.GetUserAsync(User);
+
+            if (originalPost == null)
+            {
+                return NotFound("Original post not found.");
+            }
+
+            if (user == null)
+            {
+                return Unauthorized("User is not logged in.");
+            }
+
             if (originalPost.UserId != user.Id)
             {
-                return Forbid();  // 403 Forbidden if user is not the owner
+                return Forbid();
             }
 
             originalPost.Caption = post.Caption;
@@ -208,10 +224,20 @@ public class PostController : Controller
             return NotFound("Post not found for the PostId");  // Return 404 if post is not found
         }
         // Ownership check:
-        var user = await _userManager.GetUserAsync(User);
+        var user = await _userManager.GetUserAsync(User); // Get the logged-in user
+        if (user == null)
+        {
+            return Unauthorized("User is not logged in.");
+        }
+
+        if (post == null)
+        {
+            return NotFound("Post not found.");
+        }
+
         if (post.UserId != user.Id)
         {
-            return Forbid();  
+            return Forbid();
         }
         return View(post);
     }
@@ -223,24 +249,32 @@ public class PostController : Controller
         var post = await _postRepository.GetPostById(id);
         if (post == null)
         {
-            // Return NotFoundResult if the post is not found
             return NotFound();
         }
 
-        // Ownership check:
-        var user = await _userManager.GetUserAsync(User);
+        // Ownership check
+        var user = await _userManager.GetUserAsync(User); // Get the logged-in user
+        if (user == null)
+        {
+            return Unauthorized("User is not logged in.");
+        }
+
+        if (post == null)
+        {
+            return NotFound("Post not found.");
+        }
+
         if (post.UserId != user.Id)
         {
-            return Forbid();  
+            return Forbid();
         }
 
         var result = await _postRepository.Delete(id);
         if (result)
         {
+            // Redirect back to the origin page
             return RedirectToAction("Table");
         }
-
-        // Return NotFoundResult if delete fails (handle other failures)
         return NotFound();
     }
 }

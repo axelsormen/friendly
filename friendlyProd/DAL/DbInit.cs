@@ -85,9 +85,28 @@ namespace friendly.Models
 
             // Get users from the database
             var axel = await userManager.FindByEmailAsync("axelsormen@gmail.com");
+            if (axel == null)
+            {
+                throw new InvalidOperationException("User 'axelsormen@gmail.com' not found during seeding.");
+            }
+
             var kristoffer = await userManager.FindByEmailAsync("kvamsy@gmail.com");
+            if (kristoffer == null)
+            {
+                throw new InvalidOperationException("User 'kvamsy@gmail.com' not found during seeding.");
+            }
+
             var simen = await userManager.FindByEmailAsync("simenthams@hotmail.com");
+            if (simen == null)
+            {
+                throw new InvalidOperationException("User 'simenthams@hotmail.com' not found during seeding.");
+            }
+
             var adina = await userManager.FindByEmailAsync("aheia@hotmail.com");
+            if (adina == null)
+            {
+                throw new InvalidOperationException("User 'aheia@hotmail.com' not found during seeding.");
+            }
 
             // Seed posts
             if (!context.Posts.Any())
