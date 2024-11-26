@@ -34,7 +34,6 @@ public class CommentController : Controller
     {
         _logger.LogInformation("Create POST action called with Comment data: {@Comment}", comment);
 
-        // Ensure the UserId and PostId are set
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {

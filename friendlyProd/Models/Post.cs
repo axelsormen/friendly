@@ -9,29 +9,32 @@ namespace friendly.Models
         [Key]
         public int PostId { get; set; }
     
+        // The file path for the image to the post
         [ValidateNever]
-        public string? PostImagePath { get; set; }  // Store the image file path
+        public string? PostImagePath { get; set; }  
 
+        // Caption of the post
         [Required]
         [StringLength(200)]
         public string? Caption { get; set; }
 
+        // The date the post was created
         [ValidateNever]
         public string? PostDate { get; set; }
 
-        // Reference to the IdentityUser's Id
+        // Foreign key to the user who created the post
         [ValidateNever]
         public string? UserId { get; set; }
 
-        // Navigation property to IdentityUser
+        // Navigation property to the user who created the post
         [ValidateNever]
         public virtual User? User { get; set; }
 
-        // Navgation property for the comments
+        // Navigation property for the list of comments on this post 
         [ValidateNever]
         public virtual List<Comment>? Comments { get; set; }
         
-        // Navigation property for the likes
+        // Navigation property for the list of likes for this post 
         [ValidateNever]
         public virtual List<Like>? Likes { get; set; }
     }

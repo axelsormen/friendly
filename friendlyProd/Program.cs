@@ -41,7 +41,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
  builder.Services.ConfigureApplicationCookie(options =>
  {
-     options.LoginPath = "/Identity/Account/Login"; // Ensure this path is valid
+     options.LoginPath = "/Identity/Account/Login";
  });
 
 builder.Services.AddScoped<IPostRepository, PostRepository>();
