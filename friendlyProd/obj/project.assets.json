@@ -7129,19 +7129,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/axel/.nuget/packages/": {}
+    "C:\\Users\\Bruker\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/axel/Documents/Skole/friendly/friendlyProd/friendly.csproj",
+      "projectUniqueName": "C:\\Users\\Bruker\\Documents\\Informasjonsteknologi\\Webapplikasjoner\\friendly\\friendlyProd\\friendly.csproj",
       "projectName": "friendly",
-      "projectPath": "/Users/axel/Documents/Skole/friendly/friendlyProd/friendly.csproj",
-      "packagesPath": "/Users/axel/.nuget/packages/",
-      "outputPath": "/Users/axel/Documents/Skole/friendly/friendlyProd/obj/",
+      "projectPath": "C:\\Users\\Bruker\\Documents\\Informasjonsteknologi\\Webapplikasjoner\\friendly\\friendlyProd\\friendly.csproj",
+      "packagesPath": "C:\\Users\\Bruker\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Bruker\\Documents\\Informasjonsteknologi\\Webapplikasjoner\\friendly\\friendlyProd\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/axel/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Bruker\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -7230,7 +7230,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

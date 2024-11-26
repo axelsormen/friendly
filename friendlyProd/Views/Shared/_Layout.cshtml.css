@@ -1,3 +1,4 @@
+ 
 /* Adjust the table layout for the posts */
 .table {
   border: none; /* Remove borders for a cleaner look */
@@ -120,4 +121,5 @@ ul ul {
       margin-bottom: 15px; /* Reduce margin for smaller screens */
   }
 }
+
 
