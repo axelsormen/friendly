@@ -58,7 +58,7 @@ namespace friendly.Tests.Controllers
 
         // Negative test: When there are no posts, the view should still return with an empty list or message.
         [Fact]
-        public async Task TableReturnsViewWithNoPosts()
+        public async Task TableReturnsViewWithoutPosts()
         {
             // Arrange
             _mockPostRepository.Setup(repo => repo.GetAll()).ReturnsAsync(new List<Post>());
@@ -68,9 +68,8 @@ namespace friendly.Tests.Controllers
             var result = await controller.Table();
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<PostsViewModel>(viewResult.ViewData.Model);
-            Assert.Empty(model.Posts);
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal("Post list not found.", notFoundResult.Value);
         }
 
         // Positive test: Check if new post is created and redirected

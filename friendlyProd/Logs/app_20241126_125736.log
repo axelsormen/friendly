@@ -1,0 +1,1010 @@
+2024-11-26 12:57:36.752 +01:00 [INF] User profile is available. Using '/Users/axel/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2024-11-26 12:57:37.259 +01:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+PRAGMA journal_mode = 'wal';
+2024-11-26 12:57:37.311 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetRoles" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_AspNetRoles" PRIMARY KEY,
+    "Name" TEXT NULL,
+    "NormalizedName" TEXT NULL,
+    "ConcurrencyStamp" TEXT NULL
+);
+2024-11-26 12:57:37.311 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetUsers" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_AspNetUsers" PRIMARY KEY,
+    "FirstName" TEXT NULL,
+    "LastName" TEXT NULL,
+    "ProfileImageUrl" TEXT NULL,
+    "UserName" TEXT NULL,
+    "NormalizedUserName" TEXT NULL,
+    "Email" TEXT NULL,
+    "NormalizedEmail" TEXT NULL,
+    "EmailConfirmed" INTEGER NOT NULL,
+    "PasswordHash" TEXT NULL,
+    "SecurityStamp" TEXT NULL,
+    "ConcurrencyStamp" TEXT NULL,
+    "PhoneNumber" TEXT NULL,
+    "PhoneNumberConfirmed" INTEGER NOT NULL,
+    "TwoFactorEnabled" INTEGER NOT NULL,
+    "LockoutEnd" TEXT NULL,
+    "LockoutEnabled" INTEGER NOT NULL,
+    "AccessFailedCount" INTEGER NOT NULL
+);
+2024-11-26 12:57:37.311 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetRoleClaims" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_AspNetRoleClaims" PRIMARY KEY AUTOINCREMENT,
+    "RoleId" TEXT NOT NULL,
+    "ClaimType" TEXT NULL,
+    "ClaimValue" TEXT NULL,
+    CONSTRAINT "FK_AspNetRoleClaims_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE
+);
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetUserClaims" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_AspNetUserClaims" PRIMARY KEY AUTOINCREMENT,
+    "UserId" TEXT NOT NULL,
+    "ClaimType" TEXT NULL,
+    "ClaimValue" TEXT NULL,
+    CONSTRAINT "FK_AspNetUserClaims_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetUserLogins" (
+    "LoginProvider" TEXT NOT NULL,
+    "ProviderKey" TEXT NOT NULL,
+    "ProviderDisplayName" TEXT NULL,
+    "UserId" TEXT NOT NULL,
+    CONSTRAINT "PK_AspNetUserLogins" PRIMARY KEY ("LoginProvider", "ProviderKey"),
+    CONSTRAINT "FK_AspNetUserLogins_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetUserRoles" (
+    "UserId" TEXT NOT NULL,
+    "RoleId" TEXT NOT NULL,
+    CONSTRAINT "PK_AspNetUserRoles" PRIMARY KEY ("UserId", "RoleId"),
+    CONSTRAINT "FK_AspNetUserRoles_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_AspNetUserRoles_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetUserTokens" (
+    "UserId" TEXT NOT NULL,
+    "LoginProvider" TEXT NOT NULL,
+    "Name" TEXT NOT NULL,
+    "Value" TEXT NULL,
+    CONSTRAINT "PK_AspNetUserTokens" PRIMARY KEY ("UserId", "LoginProvider", "Name"),
+    CONSTRAINT "FK_AspNetUserTokens_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Posts" (
+    "PostId" INTEGER NOT NULL CONSTRAINT "PK_Posts" PRIMARY KEY AUTOINCREMENT,
+    "PostImagePath" TEXT NULL,
+    "Caption" TEXT NOT NULL,
+    "PostDate" TEXT NULL,
+    "UserId" TEXT NULL,
+    CONSTRAINT "FK_Posts_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id")
+);
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Comments" (
+    "CommentId" INTEGER NOT NULL CONSTRAINT "PK_Comments" PRIMARY KEY AUTOINCREMENT,
+    "CommentText" TEXT NOT NULL,
+    "CommentDate" TEXT NULL,
+    "UserId" TEXT NULL,
+    "PostId" INTEGER NOT NULL,
+    CONSTRAINT "FK_Comments_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id"),
+    CONSTRAINT "FK_Comments_Posts_PostId" FOREIGN KEY ("PostId") REFERENCES "Posts" ("PostId") ON DELETE CASCADE
+);
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "Likes" (
+    "LikeId" INTEGER NOT NULL CONSTRAINT "PK_Likes" PRIMARY KEY AUTOINCREMENT,
+    "PostId" INTEGER NOT NULL,
+    "UserId" TEXT NOT NULL,
+    CONSTRAINT "FK_Likes_Posts_PostId" FOREIGN KEY ("PostId") REFERENCES "Posts" ("PostId") ON DELETE CASCADE
+);
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_AspNetRoleClaims_RoleId" ON "AspNetRoleClaims" ("RoleId");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "RoleNameIndex" ON "AspNetRoles" ("NormalizedName");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_AspNetUserClaims_UserId" ON "AspNetUserClaims" ("UserId");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_AspNetUserLogins_UserId" ON "AspNetUserLogins" ("UserId");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_AspNetUserRoles_RoleId" ON "AspNetUserRoles" ("RoleId");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "EmailIndex" ON "AspNetUsers" ("NormalizedEmail");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "UserNameIndex" ON "AspNetUsers" ("NormalizedUserName");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Comments_PostId" ON "Comments" ("PostId");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Comments_UserId" ON "Comments" ("UserId");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX "IX_Likes_PostId_UserId" ON "Likes" ("PostId", "UserId");
+2024-11-26 12:57:37.312 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_Posts_UserId" ON "Posts" ("UserId");
+2024-11-26 12:57:37.438 +01:00 [INF] Executed DbCommand (2ms) [Parameters=[@__normalizedName_0='?' (Size = 5)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2024-11-26 12:57:37.443 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 5)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2024-11-26 12:57:37.485 +01:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (Size = 5), @p3='?' (Size = 5)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetRoles" ("Id", "ConcurrencyStamp", "Name", "NormalizedName")
+VALUES (@p0, @p1, @p2, @p3);
+2024-11-26 12:57:37.488 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2024-11-26 12:57:37.488 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedName_0
+LIMIT 1
+2024-11-26 12:57:37.490 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (Size = 4), @p3='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetRoles" ("Id", "ConcurrencyStamp", "Name", "NormalizedName")
+VALUES (@p0, @p1, @p2, @p3);
+2024-11-26 12:57:37.494 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "AspNetUsers" AS "a")
+2024-11-26 12:57:37.545 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedUserName_0='?' (Size = 10)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedUserName" = @__normalizedUserName_0
+LIMIT 1
+2024-11-26 12:57:37.549 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 20)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.567 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = Int32), @p2='?' (Size = 36), @p3='?' (Size = 20), @p4='?' (DbType = Boolean), @p5='?' (Size = 4), @p6='?' (Size = 5), @p7='?' (DbType = Boolean), @p8='?' (DbType = DateTimeOffset), @p9='?' (Size = 20), @p10='?' (Size = 10), @p11='?' (Size = 84), @p12='?' (Size = 12), @p13='?' (DbType = Boolean), @p14='?' (Size = 41), @p15='?' (Size = 32), @p16='?' (DbType = Boolean), @p17='?' (Size = 10)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetUsers" ("Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfileImageUrl", "SecurityStamp", "TwoFactorEnabled", "UserName")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+2024-11-26 12:57:37.570 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedRoleName_0
+LIMIT 2
+2024-11-26 12:57:37.579 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36), @__p_1='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."UserId", "a"."RoleId"
+FROM "AspNetUserRoles" AS "a"
+WHERE "a"."UserId" = @__p_0 AND "a"."RoleId" = @__p_1
+LIMIT 1
+2024-11-26 12:57:37.579 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedRoleName_0
+LIMIT 2
+2024-11-26 12:57:37.583 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedUserName_0='?' (Size = 10)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedUserName" = @__normalizedUserName_0
+LIMIT 1
+2024-11-26 12:57:37.583 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 20)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.588 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetUserRoles" ("RoleId", "UserId")
+VALUES (@p0, @p1);
+2024-11-26 12:57:37.589 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p17='?' (Size = 36), @p0='?' (DbType = Int32), @p1='?' (Size = 36), @p18='?' (Size = 36), @p2='?' (Size = 20), @p3='?' (DbType = Boolean), @p4='?' (Size = 4), @p5='?' (Size = 5), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTimeOffset), @p8='?' (Size = 20), @p9='?' (Size = 10), @p10='?' (Size = 84), @p11='?' (Size = 12), @p12='?' (DbType = Boolean), @p13='?' (Size = 41), @p14='?' (Size = 32), @p15='?' (DbType = Boolean), @p16='?' (Size = 10)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "AspNetUsers" SET "AccessFailedCount" = @p0, "ConcurrencyStamp" = @p1, "Email" = @p2, "EmailConfirmed" = @p3, "FirstName" = @p4, "LastName" = @p5, "LockoutEnabled" = @p6, "LockoutEnd" = @p7, "NormalizedEmail" = @p8, "NormalizedUserName" = @p9, "PasswordHash" = @p10, "PhoneNumber" = @p11, "PhoneNumberConfirmed" = @p12, "ProfileImageUrl" = @p13, "SecurityStamp" = @p14, "TwoFactorEnabled" = @p15, "UserName" = @p16
+WHERE "Id" = @p17 AND "ConcurrencyStamp" = @p18
+RETURNING 1;
+2024-11-26 12:57:37.629 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedUserName_0='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedUserName" = @__normalizedUserName_0
+LIMIT 1
+2024-11-26 12:57:37.629 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 16)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.631 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = Int32), @p2='?' (Size = 36), @p3='?' (Size = 16), @p4='?' (DbType = Boolean), @p5='?' (Size = 10), @p6='?' (Size = 4), @p7='?' (DbType = Boolean), @p8='?' (DbType = DateTimeOffset), @p9='?' (Size = 16), @p10='?' (Size = 6), @p11='?' (Size = 84), @p12='?' (Size = 12), @p13='?' (DbType = Boolean), @p14='?' (Size = 41), @p15='?' (Size = 32), @p16='?' (DbType = Boolean), @p17='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetUsers" ("Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfileImageUrl", "SecurityStamp", "TwoFactorEnabled", "UserName")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+2024-11-26 12:57:37.631 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedRoleName_0
+LIMIT 2
+2024-11-26 12:57:37.632 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36), @__p_1='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."UserId", "a"."RoleId"
+FROM "AspNetUserRoles" AS "a"
+WHERE "a"."UserId" = @__p_0 AND "a"."RoleId" = @__p_1
+LIMIT 1
+2024-11-26 12:57:37.632 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedRoleName_0
+LIMIT 2
+2024-11-26 12:57:37.632 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedUserName_0='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedUserName" = @__normalizedUserName_0
+LIMIT 1
+2024-11-26 12:57:37.632 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 16)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.632 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetUserRoles" ("RoleId", "UserId")
+VALUES (@p0, @p1);
+2024-11-26 12:57:37.632 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p17='?' (Size = 36), @p0='?' (DbType = Int32), @p1='?' (Size = 36), @p18='?' (Size = 36), @p2='?' (Size = 16), @p3='?' (DbType = Boolean), @p4='?' (Size = 10), @p5='?' (Size = 4), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTimeOffset), @p8='?' (Size = 16), @p9='?' (Size = 6), @p10='?' (Size = 84), @p11='?' (Size = 12), @p12='?' (DbType = Boolean), @p13='?' (Size = 41), @p14='?' (Size = 32), @p15='?' (DbType = Boolean), @p16='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "AspNetUsers" SET "AccessFailedCount" = @p0, "ConcurrencyStamp" = @p1, "Email" = @p2, "EmailConfirmed" = @p3, "FirstName" = @p4, "LastName" = @p5, "LockoutEnabled" = @p6, "LockoutEnd" = @p7, "NormalizedEmail" = @p8, "NormalizedUserName" = @p9, "PasswordHash" = @p10, "PhoneNumber" = @p11, "PhoneNumberConfirmed" = @p12, "ProfileImageUrl" = @p13, "SecurityStamp" = @p14, "TwoFactorEnabled" = @p15, "UserName" = @p16
+WHERE "Id" = @p17 AND "ConcurrencyStamp" = @p18
+RETURNING 1;
+2024-11-26 12:57:37.671 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedUserName_0='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedUserName" = @__normalizedUserName_0
+LIMIT 1
+2024-11-26 12:57:37.671 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 22)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.672 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = Int32), @p2='?' (Size = 36), @p3='?' (Size = 22), @p4='?' (DbType = Boolean), @p5='?' (Size = 5), @p6='?' (Size = 5), @p7='?' (DbType = Boolean), @p8='?' (DbType = DateTimeOffset), @p9='?' (Size = 22), @p10='?' (Size = 6), @p11='?' (Size = 84), @p12='?', @p13='?' (DbType = Boolean), @p14='?' (Size = 41), @p15='?' (Size = 32), @p16='?' (DbType = Boolean), @p17='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetUsers" ("Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfileImageUrl", "SecurityStamp", "TwoFactorEnabled", "UserName")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+2024-11-26 12:57:37.672 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedRoleName_0
+LIMIT 2
+2024-11-26 12:57:37.672 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36), @__p_1='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."UserId", "a"."RoleId"
+FROM "AspNetUserRoles" AS "a"
+WHERE "a"."UserId" = @__p_0 AND "a"."RoleId" = @__p_1
+LIMIT 1
+2024-11-26 12:57:37.672 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedRoleName_0
+LIMIT 2
+2024-11-26 12:57:37.672 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedUserName_0='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedUserName" = @__normalizedUserName_0
+LIMIT 1
+2024-11-26 12:57:37.672 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 22)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.673 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetUserRoles" ("RoleId", "UserId")
+VALUES (@p0, @p1);
+2024-11-26 12:57:37.673 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p17='?' (Size = 36), @p0='?' (DbType = Int32), @p1='?' (Size = 36), @p18='?' (Size = 36), @p2='?' (Size = 22), @p3='?' (DbType = Boolean), @p4='?' (Size = 5), @p5='?' (Size = 5), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTimeOffset), @p8='?' (Size = 22), @p9='?' (Size = 6), @p10='?' (Size = 84), @p11='?', @p12='?' (DbType = Boolean), @p13='?' (Size = 41), @p14='?' (Size = 32), @p15='?' (DbType = Boolean), @p16='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "AspNetUsers" SET "AccessFailedCount" = @p0, "ConcurrencyStamp" = @p1, "Email" = @p2, "EmailConfirmed" = @p3, "FirstName" = @p4, "LastName" = @p5, "LockoutEnabled" = @p6, "LockoutEnd" = @p7, "NormalizedEmail" = @p8, "NormalizedUserName" = @p9, "PasswordHash" = @p10, "PhoneNumber" = @p11, "PhoneNumberConfirmed" = @p12, "ProfileImageUrl" = @p13, "SecurityStamp" = @p14, "TwoFactorEnabled" = @p15, "UserName" = @p16
+WHERE "Id" = @p17 AND "ConcurrencyStamp" = @p18
+RETURNING 1;
+2024-11-26 12:57:37.711 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedUserName_0='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedUserName" = @__normalizedUserName_0
+LIMIT 1
+2024-11-26 12:57:37.711 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 17)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.712 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (DbType = Int32), @p2='?' (Size = 36), @p3='?' (Size = 17), @p4='?' (DbType = Boolean), @p5='?' (Size = 5), @p6='?' (Size = 4), @p7='?' (DbType = Boolean), @p8='?' (DbType = DateTimeOffset), @p9='?' (Size = 17), @p10='?' (Size = 6), @p11='?' (Size = 84), @p12='?', @p13='?' (DbType = Boolean), @p14='?' (Size = 41), @p15='?' (Size = 32), @p16='?' (DbType = Boolean), @p17='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetUsers" ("Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfileImageUrl", "SecurityStamp", "TwoFactorEnabled", "UserName")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17);
+2024-11-26 12:57:37.712 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedRoleName_0
+LIMIT 2
+2024-11-26 12:57:37.712 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36), @__p_1='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."UserId", "a"."RoleId"
+FROM "AspNetUserRoles" AS "a"
+WHERE "a"."UserId" = @__p_0 AND "a"."RoleId" = @__p_1
+LIMIT 1
+2024-11-26 12:57:37.712 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedRoleName_0='?' (Size = 4)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+FROM "AspNetRoles" AS "a"
+WHERE "a"."NormalizedName" = @__normalizedRoleName_0
+LIMIT 2
+2024-11-26 12:57:37.713 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedUserName_0='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedUserName" = @__normalizedUserName_0
+LIMIT 1
+2024-11-26 12:57:37.713 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 17)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.713 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "AspNetUserRoles" ("RoleId", "UserId")
+VALUES (@p0, @p1);
+2024-11-26 12:57:37.713 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p17='?' (Size = 36), @p0='?' (DbType = Int32), @p1='?' (Size = 36), @p18='?' (Size = 36), @p2='?' (Size = 17), @p3='?' (DbType = Boolean), @p4='?' (Size = 5), @p5='?' (Size = 4), @p6='?' (DbType = Boolean), @p7='?' (DbType = DateTimeOffset), @p8='?' (Size = 17), @p9='?' (Size = 6), @p10='?' (Size = 84), @p11='?', @p12='?' (DbType = Boolean), @p13='?' (Size = 41), @p14='?' (Size = 32), @p15='?' (DbType = Boolean), @p16='?' (Size = 6)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "AspNetUsers" SET "AccessFailedCount" = @p0, "ConcurrencyStamp" = @p1, "Email" = @p2, "EmailConfirmed" = @p3, "FirstName" = @p4, "LastName" = @p5, "LockoutEnabled" = @p6, "LockoutEnd" = @p7, "NormalizedEmail" = @p8, "NormalizedUserName" = @p9, "PasswordHash" = @p10, "PhoneNumber" = @p11, "PhoneNumberConfirmed" = @p12, "ProfileImageUrl" = @p13, "SecurityStamp" = @p14, "TwoFactorEnabled" = @p15, "UserName" = @p16
+WHERE "Id" = @p17 AND "ConcurrencyStamp" = @p18
+RETURNING 1;
+2024-11-26 12:57:37.713 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 20)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.713 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 16)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.714 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 22)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.714 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__normalizedEmail_0='?' (Size = 17)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."NormalizedEmail" = @__normalizedEmail_0
+LIMIT 2
+2024-11-26 12:57:37.715 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Posts" AS "p")
+2024-11-26 12:57:37.731 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 22), @p1='?' (Size = 22), @p2='?' (Size = 22), @p3='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Posts" ("Caption", "PostDate", "PostImagePath", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "PostId";
+2024-11-26 12:57:37.735 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 19), @p1='?' (Size = 22), @p2='?' (Size = 17), @p3='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Posts" ("Caption", "PostDate", "PostImagePath", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "PostId";
+2024-11-26 12:57:37.736 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 17), @p1='?' (Size = 22), @p2='?' (Size = 18), @p3='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Posts" ("Caption", "PostDate", "PostImagePath", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "PostId";
+2024-11-26 12:57:37.740 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+2024-11-26 12:57:37.741 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Comments" AS "c")
+2024-11-26 12:57:37.746 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 22), @p1='?' (Size = 8), @p2='?' (DbType = Int32), @p3='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Comments" ("CommentDate", "CommentText", "PostId", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "CommentId";
+2024-11-26 12:57:37.747 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 22), @p1='?' (Size = 15), @p2='?' (DbType = Int32), @p3='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Comments" ("CommentDate", "CommentText", "PostId", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "CommentId";
+2024-11-26 12:57:37.747 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 22), @p1='?' (Size = 33), @p2='?' (DbType = Int32), @p3='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Comments" ("CommentDate", "CommentText", "PostId", "UserId")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "CommentId";
+2024-11-26 12:57:37.800 +01:00 [INF] Now listening on: http://localhost:5127
+2024-11-26 12:57:37.802 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-11-26 12:57:37.802 +01:00 [INF] Hosting environment: Development
+2024-11-26 12:57:37.802 +01:00 [INF] Content root path: /Users/axel/Documents/Skole/friendly/friendlyProd
+2024-11-26 12:57:42.945 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Table - null null
+2024-11-26 12:57:42.962 +01:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-11-26 12:57:42.970 +01:00 [INF] Route matched with {action = "Table", controller = "Post", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Table() on controller friendly.Controllers.PostController (friendly).
+2024-11-26 12:57:42.993 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+ORDER BY "p"."PostDate" DESC
+2024-11-26 12:57:43.002 +01:00 [INF] Executing ViewResult, running view Table.
+2024-11-26 12:57:43.049 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:57:43.057 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:57:43.069 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:57:43.072 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:57:43.075 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:57:43.076 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:57:43.076 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:57:43.077 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:57:43.077 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:57:43.090 +01:00 [INF] Executed ViewResult - view Table executed in 86.2097ms.
+2024-11-26 12:57:43.091 +01:00 [INF] Executed action friendly.Controllers.PostController.Table (friendly) in 120.2403ms
+2024-11-26 12:57:43.091 +01:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-11-26 12:57:43.093 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Table - 200 null text/html; charset=utf-8 149.2411ms
+2024-11-26 12:57:43.146 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:57:43.147 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:57:43.147 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:57:43.148 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 2.4686ms
+2024-11-26 12:57:43.148 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 1.2753ms
+2024-11-26 12:57:43.148 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 1.7741ms
+2024-11-26 12:57:43.149 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:57:43.149 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:57:43.150 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:57:43.187 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=2 - null null
+2024-11-26 12:57:43.187 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=3 - null null
+2024-11-26 12:57:43.187 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=1 - null null
+2024-11-26 12:57:43.191 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:57:43.191 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:57:43.191 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:57:43.194 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:57:43.194 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:57:43.194 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:57:43.194 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=1 - 401 0 null 7.3109ms
+2024-11-26 12:57:43.194 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=2 - 401 0 null 7.415ms
+2024-11-26 12:57:43.194 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=3 - 401 0 null 7.4443ms
+2024-11-26 12:58:38.631 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5127/Like/Create - application/x-www-form-urlencoded; charset=UTF-8 16
+2024-11-26 12:58:38.639 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:58:38.640 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:58:38.641 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5127/Like/Create - 401 0 null 10.554ms
+2024-11-26 12:58:49.028 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Grid - null null
+2024-11-26 12:58:49.033 +01:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Grid (friendly)'
+2024-11-26 12:58:49.044 +01:00 [INF] Route matched with {action = "Grid", controller = "Post", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Grid() on controller friendly.Controllers.PostController (friendly).
+2024-11-26 12:58:49.092 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+ORDER BY "p"."PostDate" DESC
+2024-11-26 12:58:49.093 +01:00 [INF] Executing ViewResult, running view Grid.
+2024-11-26 12:58:49.100 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:58:49.101 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:58:49.102 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:58:49.103 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:58:49.103 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:58:49.104 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:58:49.105 +01:00 [INF] Executed ViewResult - view Grid executed in 12.1324ms.
+2024-11-26 12:58:49.105 +01:00 [INF] Executed action friendly.Controllers.PostController.Grid (friendly) in 61.126ms
+2024-11-26 12:58:49.105 +01:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Grid (friendly)'
+2024-11-26 12:58:49.105 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Grid - 200 null text/html; charset=utf-8 77.6839ms
+2024-11-26 12:58:49.106 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:58:49.107 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.5217ms
+2024-11-26 12:58:49.107 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:58:49.111 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:58:49.111 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:58:49.111 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.2624ms
+2024-11-26 12:58:49.111 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:58:49.111 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.5522ms
+2024-11-26 12:58:49.111 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:58:52.492 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/User/Table - null null
+2024-11-26 12:58:52.494 +01:00 [INF] Executing endpoint 'friendly.Controllers.UserController.Table (friendly)'
+2024-11-26 12:58:52.499 +01:00 [INF] Route matched with {action = "Table", controller = "User", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Table() on controller friendly.Controllers.UserController (friendly).
+2024-11-26 12:58:52.512 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+2024-11-26 12:58:52.514 +01:00 [INF] Executing ViewResult, running view Table.
+2024-11-26 12:58:52.530 +01:00 [INF] Executed ViewResult - view Table executed in 17.1665ms.
+2024-11-26 12:58:52.530 +01:00 [INF] Executed action friendly.Controllers.UserController.Table (friendly) in 31.2492ms
+2024-11-26 12:58:52.530 +01:00 [INF] Executed endpoint 'friendly.Controllers.UserController.Table (friendly)'
+2024-11-26 12:58:52.531 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/User/Table - 200 null text/html; charset=utf-8 38.9945ms
+2024-11-26 12:58:52.544 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:58:52.545 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.6046ms
+2024-11-26 12:58:52.545 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:58:52.547 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:58:52.547 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:58:52.547 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.2747ms
+2024-11-26 12:58:52.547 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.3716ms
+2024-11-26 12:58:52.547 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:58:52.547 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:58:54.815 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Identity/Account/Login - null null
+2024-11-26 12:58:54.815 +01:00 [INF] Executing endpoint '/Account/Login'
+2024-11-26 12:58:54.835 +01:00 [INF] Route matched with {page = "/Account/Login", area = "Identity", action = "", controller = ""}. Executing page /Account/Login
+2024-11-26 12:58:54.854 +01:00 [INF] Executing handler method friendly.Areas.Identity.Pages.Account.LoginModel.OnGetAsync - ModelState is "Valid"
+2024-11-26 12:58:54.858 +01:00 [INF] AuthenticationScheme: Identity.External signed out.
+2024-11-26 12:58:54.858 +01:00 [INF] Executed handler method OnGetAsync, returned result .
+2024-11-26 12:58:54.862 +01:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2024-11-26 12:58:54.862 +01:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2024-11-26 12:58:54.885 +01:00 [INF] Executed page /Account/Login in 50.1698ms
+2024-11-26 12:58:54.885 +01:00 [INF] Executed endpoint '/Account/Login'
+2024-11-26 12:58:54.886 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Identity/Account/Login - 200 null text/html; charset=utf-8 71.149ms
+2024-11-26 12:58:54.897 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:58:54.897 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:58:54.897 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:58:54.897 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.6615ms
+2024-11-26 12:58:54.897 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.6197ms
+2024-11-26 12:58:54.897 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.3562ms
+2024-11-26 12:58:54.897 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:58:54.897 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:58:54.897 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:58:54.902 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - null null
+2024-11-26 12:58:54.902 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - null null
+2024-11-26 12:58:54.903 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - 404 0 null 0.4632ms
+2024-11-26 12:58:54.903 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js, Response status code: 404
+2024-11-26 12:58:54.903 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - 404 0 null 0.3296ms
+2024-11-26 12:58:54.903 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js, Response status code: 404
+2024-11-26 12:58:56.107 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Identity/Account/Register - null null
+2024-11-26 12:58:56.109 +01:00 [INF] Executing endpoint '/Account/Register'
+2024-11-26 12:58:56.115 +01:00 [INF] Route matched with {page = "/Account/Register", area = "Identity", action = "", controller = ""}. Executing page /Account/Register
+2024-11-26 12:58:56.117 +01:00 [INF] Executing handler method friendly.Areas.Identity.Pages.Account.RegisterModel.OnGetAsync - ModelState is "Valid"
+2024-11-26 12:58:56.118 +01:00 [INF] Executed handler method OnGetAsync, returned result .
+2024-11-26 12:58:56.118 +01:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2024-11-26 12:58:56.118 +01:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2024-11-26 12:58:56.145 +01:00 [INF] Executed page /Account/Register in 30.0686ms
+2024-11-26 12:58:56.146 +01:00 [INF] Executed endpoint '/Account/Register'
+2024-11-26 12:58:56.146 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Identity/Account/Register - 200 null text/html; charset=utf-8 39.0745ms
+2024-11-26 12:58:56.148 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:58:56.148 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:58:56.148 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - null null
+2024-11-26 12:58:56.148 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - null null
+2024-11-26 12:58:56.148 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - 404 0 null 0.4726ms
+2024-11-26 12:58:56.148 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.6246ms
+2024-11-26 12:58:56.148 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js, Response status code: 404
+2024-11-26 12:58:56.148 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:58:56.148 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.6129ms
+2024-11-26 12:58:56.148 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - 404 0 null 0.2937ms
+2024-11-26 12:58:56.149 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:58:56.149 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js, Response status code: 404
+2024-11-26 12:58:56.156 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:58:56.157 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.3708ms
+2024-11-26 12:58:56.157 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:58:57.764 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Identity/Account/Login - null null
+2024-11-26 12:58:57.765 +01:00 [INF] Executing endpoint '/Account/Login'
+2024-11-26 12:58:57.765 +01:00 [INF] Route matched with {page = "/Account/Login", area = "Identity", action = "", controller = ""}. Executing page /Account/Login
+2024-11-26 12:58:57.766 +01:00 [INF] Executing handler method friendly.Areas.Identity.Pages.Account.LoginModel.OnGetAsync - ModelState is "Valid"
+2024-11-26 12:58:57.767 +01:00 [INF] AuthenticationScheme: Identity.External signed out.
+2024-11-26 12:58:57.767 +01:00 [INF] Executed handler method OnGetAsync, returned result .
+2024-11-26 12:58:57.767 +01:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2024-11-26 12:58:57.767 +01:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2024-11-26 12:58:57.770 +01:00 [INF] Executed page /Account/Login in 4.2339ms
+2024-11-26 12:58:57.770 +01:00 [INF] Executed endpoint '/Account/Login'
+2024-11-26 12:58:57.770 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Identity/Account/Login - 200 null text/html; charset=utf-8 6.1318ms
+2024-11-26 12:58:57.771 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:58:57.771 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:58:57.771 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - null null
+2024-11-26 12:58:57.772 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.4265ms
+2024-11-26 12:58:57.772 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - null null
+2024-11-26 12:58:57.772 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:58:57.772 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - 404 0 null 0.16ms
+2024-11-26 12:58:57.772 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js, Response status code: 404
+2024-11-26 12:58:57.772 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - 404 0 null 0.1642ms
+2024-11-26 12:58:57.772 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js, Response status code: 404
+2024-11-26 12:58:57.772 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.7326ms
+2024-11-26 12:58:57.772 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:58:57.779 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:58:57.780 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.5021ms
+2024-11-26 12:58:57.780 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:58:58.734 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Identity/Account/Register - null null
+2024-11-26 12:58:58.734 +01:00 [INF] Executing endpoint '/Account/Register'
+2024-11-26 12:58:58.734 +01:00 [INF] Route matched with {page = "/Account/Register", area = "Identity", action = "", controller = ""}. Executing page /Account/Register
+2024-11-26 12:58:58.735 +01:00 [INF] Executing handler method friendly.Areas.Identity.Pages.Account.RegisterModel.OnGetAsync - ModelState is "Valid"
+2024-11-26 12:58:58.735 +01:00 [INF] Executed handler method OnGetAsync, returned result .
+2024-11-26 12:58:58.735 +01:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2024-11-26 12:58:58.735 +01:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2024-11-26 12:58:58.738 +01:00 [INF] Executed page /Account/Register in 3.2941ms
+2024-11-26 12:58:58.738 +01:00 [INF] Executed endpoint '/Account/Register'
+2024-11-26 12:58:58.738 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Identity/Account/Register - 200 null text/html; charset=utf-8 4.4296ms
+2024-11-26 12:58:58.739 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:58:58.739 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:58:58.739 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.3009ms
+2024-11-26 12:58:58.739 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:58:58.739 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.5487ms
+2024-11-26 12:58:58.739 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:58:58.739 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - null null
+2024-11-26 12:58:58.740 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - 404 0 null 0.3935ms
+2024-11-26 12:58:58.740 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - null null
+2024-11-26 12:58:58.740 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - 404 0 null 0.4966ms
+2024-11-26 12:58:58.740 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js, Response status code: 404
+2024-11-26 12:58:58.741 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js, Response status code: 404
+2024-11-26 12:58:58.747 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:58:58.747 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.5145ms
+2024-11-26 12:58:58.747 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:58:59.285 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Identity/Account/Login - null null
+2024-11-26 12:58:59.285 +01:00 [INF] Executing endpoint '/Account/Login'
+2024-11-26 12:58:59.286 +01:00 [INF] Route matched with {page = "/Account/Login", area = "Identity", action = "", controller = ""}. Executing page /Account/Login
+2024-11-26 12:58:59.287 +01:00 [INF] Executing handler method friendly.Areas.Identity.Pages.Account.LoginModel.OnGetAsync - ModelState is "Valid"
+2024-11-26 12:58:59.287 +01:00 [INF] AuthenticationScheme: Identity.External signed out.
+2024-11-26 12:58:59.287 +01:00 [INF] Executed handler method OnGetAsync, returned result .
+2024-11-26 12:58:59.287 +01:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2024-11-26 12:58:59.287 +01:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2024-11-26 12:58:59.289 +01:00 [INF] Executed page /Account/Login in 2.9107ms
+2024-11-26 12:58:59.289 +01:00 [INF] Executed endpoint '/Account/Login'
+2024-11-26 12:58:59.289 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Identity/Account/Login - 200 null text/html; charset=utf-8 4.5053ms
+2024-11-26 12:58:59.290 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:58:59.290 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.3776ms
+2024-11-26 12:58:59.291 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:58:59.291 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:58:59.291 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:58:59.291 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - null null
+2024-11-26 12:58:59.291 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - 404 0 null 0.1637ms
+2024-11-26 12:58:59.291 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js, Response status code: 404
+2024-11-26 12:58:59.291 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.2535ms
+2024-11-26 12:58:59.291 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.2066ms
+2024-11-26 12:58:59.291 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:58:59.291 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:58:59.291 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - null null
+2024-11-26 12:58:59.291 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - 404 0 null 0.1062ms
+2024-11-26 12:58:59.291 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js, Response status code: 404
+2024-11-26 12:59:01.266 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Identity/Account/Register?returnUrl=%2F - null null
+2024-11-26 12:59:01.266 +01:00 [INF] Executing endpoint '/Account/Register'
+2024-11-26 12:59:01.266 +01:00 [INF] Route matched with {page = "/Account/Register", area = "Identity", action = "", controller = ""}. Executing page /Account/Register
+2024-11-26 12:59:01.268 +01:00 [INF] Executing handler method friendly.Areas.Identity.Pages.Account.RegisterModel.OnGetAsync - ModelState is "Valid"
+2024-11-26 12:59:01.268 +01:00 [INF] Executed handler method OnGetAsync, returned result .
+2024-11-26 12:59:01.268 +01:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2024-11-26 12:59:01.268 +01:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2024-11-26 12:59:01.270 +01:00 [INF] Executed page /Account/Register in 4.2059ms
+2024-11-26 12:59:01.270 +01:00 [INF] Executed endpoint '/Account/Register'
+2024-11-26 12:59:01.271 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Identity/Account/Register?returnUrl=%2F - 200 null text/html; charset=utf-8 5.0193ms
+2024-11-26 12:59:01.278 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:59:01.279 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:59:01.279 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:59:01.279 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.4589ms
+2024-11-26 12:59:01.279 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.1911ms
+2024-11-26 12:59:01.279 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:59:01.279 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:59:01.279 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.1925ms
+2024-11-26 12:59:01.279 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - null null
+2024-11-26 12:59:01.279 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - null null
+2024-11-26 12:59:01.279 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:59:01.279 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - 404 0 null 0.1172ms
+2024-11-26 12:59:01.279 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js, Response status code: 404
+2024-11-26 12:59:01.279 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - 404 0 null 0.1115ms
+2024-11-26 12:59:01.279 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js, Response status code: 404
+2024-11-26 12:59:04.162 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5127/Identity/Account/Register?returnUrl=%2F - application/x-www-form-urlencoded 251
+2024-11-26 12:59:04.163 +01:00 [INF] Executing endpoint '/Account/Register'
+2024-11-26 12:59:04.163 +01:00 [INF] Route matched with {page = "/Account/Register", area = "Identity", action = "", controller = ""}. Executing page /Account/Register
+2024-11-26 12:59:04.183 +01:00 [INF] Executing handler method friendly.Areas.Identity.Pages.Account.RegisterModel.OnPostAsync - ModelState is "Invalid"
+2024-11-26 12:59:04.186 +01:00 [INF] Executed handler method OnPostAsync, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2024-11-26 12:59:04.188 +01:00 [INF] Executed page /Account/Register in 24.6826ms
+2024-11-26 12:59:04.188 +01:00 [INF] Executed endpoint '/Account/Register'
+2024-11-26 12:59:04.188 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5127/Identity/Account/Register?returnUrl=%2F - 200 null text/html; charset=utf-8 25.737ms
+2024-11-26 12:59:04.198 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:59:04.199 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:59:04.199 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.7042ms
+2024-11-26 12:59:04.199 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:59:04.199 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:59:04.199 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.2637ms
+2024-11-26 12:59:04.199 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - null null
+2024-11-26 12:59:04.199 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:59:04.199 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - null null
+2024-11-26 12:59:04.199 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.2263ms
+2024-11-26 12:59:04.199 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js - 404 0 null 0.1785ms
+2024-11-26 12:59:04.199 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js, Response status code: 404
+2024-11-26 12:59:04.199 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js - 404 0 null 0.2915ms
+2024-11-26 12:59:04.200 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation/dist/jquery.validate.min.js, Response status code: 404
+2024-11-26 12:59:04.200 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:59:06.845 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/ - null null
+2024-11-26 12:59:06.846 +01:00 [INF] Executing endpoint 'friendly.Controllers.HomeController.Index (friendly)'
+2024-11-26 12:59:06.847 +01:00 [INF] Route matched with {action = "Index", controller = "Home", page = "", area = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller friendly.Controllers.HomeController (friendly).
+2024-11-26 12:59:06.849 +01:00 [INF] Executing ViewResult, running view Index.
+2024-11-26 12:59:06.861 +01:00 [INF] Executed ViewResult - view Index executed in 13.2015ms.
+2024-11-26 12:59:06.861 +01:00 [INF] Executed action friendly.Controllers.HomeController.Index (friendly) in 14.0954ms
+2024-11-26 12:59:06.861 +01:00 [INF] Executed endpoint 'friendly.Controllers.HomeController.Index (friendly)'
+2024-11-26 12:59:06.861 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/ - 200 null text/html; charset=utf-8 16.3872ms
+2024-11-26 12:59:06.862 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:59:06.862 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:59:06.863 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.3068ms
+2024-11-26 12:59:06.863 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:59:06.863 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.1479ms
+2024-11-26 12:59:06.863 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:59:06.870 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:59:06.870 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.369ms
+2024-11-26 12:59:06.870 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:59:07.370 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/ - null null
+2024-11-26 12:59:07.370 +01:00 [INF] Executing endpoint 'friendly.Controllers.HomeController.Index (friendly)'
+2024-11-26 12:59:07.370 +01:00 [INF] Route matched with {action = "Index", controller = "Home", page = "", area = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller friendly.Controllers.HomeController (friendly).
+2024-11-26 12:59:07.370 +01:00 [INF] Executing ViewResult, running view Index.
+2024-11-26 12:59:07.372 +01:00 [INF] Executed ViewResult - view Index executed in 1.4662ms.
+2024-11-26 12:59:07.372 +01:00 [INF] Executed action friendly.Controllers.HomeController.Index (friendly) in 1.6428ms
+2024-11-26 12:59:07.372 +01:00 [INF] Executed endpoint 'friendly.Controllers.HomeController.Index (friendly)'
+2024-11-26 12:59:07.372 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/ - 200 null text/html; charset=utf-8 2.2701ms
+2024-11-26 12:59:07.372 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:59:07.373 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.2588ms
+2024-11-26 12:59:07.373 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:59:07.373 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:59:07.373 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:59:07.374 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.2034ms
+2024-11-26 12:59:07.374 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:59:07.374 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.2165ms
+2024-11-26 12:59:07.374 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:59:09.764 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Table - null null
+2024-11-26 12:59:09.765 +01:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-11-26 12:59:09.765 +01:00 [INF] Route matched with {action = "Table", controller = "Post", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Table() on controller friendly.Controllers.PostController (friendly).
+2024-11-26 12:59:09.768 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+ORDER BY "p"."PostDate" DESC
+2024-11-26 12:59:09.770 +01:00 [INF] Executing ViewResult, running view Table.
+2024-11-26 12:59:09.773 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:59:09.774 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:59:09.775 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:59:09.778 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:59:09.779 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:59:09.780 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:59:09.780 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:59:09.781 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:59:09.781 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:59:09.782 +01:00 [INF] Executed ViewResult - view Table executed in 12.1547ms.
+2024-11-26 12:59:09.782 +01:00 [INF] Executed action friendly.Controllers.PostController.Table (friendly) in 16.7263ms
+2024-11-26 12:59:09.782 +01:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-11-26 12:59:09.782 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Table - 200 null text/html; charset=utf-8 17.9369ms
+2024-11-26 12:59:09.784 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:59:09.784 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:59:09.784 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.384ms
+2024-11-26 12:59:09.784 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:59:09.784 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.4217ms
+2024-11-26 12:59:09.784 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:59:09.784 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:59:09.784 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.4791ms
+2024-11-26 12:59:09.784 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:59:09.853 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=3 - null null
+2024-11-26 12:59:09.853 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=2 - null null
+2024-11-26 12:59:09.853 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=1 - null null
+2024-11-26 12:59:09.855 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:59:09.855 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:59:09.855 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:59:09.855 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:59:09.855 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:59:09.855 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:59:09.855 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=1 - 401 0 null 1.5855ms
+2024-11-26 12:59:09.855 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=2 - 401 0 null 1.5693ms
+2024-11-26 12:59:09.855 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=3 - 401 0 null 1.5845ms
+2024-11-26 12:59:11.136 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/ - null null
+2024-11-26 12:59:11.136 +01:00 [INF] Executing endpoint 'friendly.Controllers.HomeController.Index (friendly)'
+2024-11-26 12:59:11.136 +01:00 [INF] Route matched with {action = "Index", controller = "Home", page = "", area = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller friendly.Controllers.HomeController (friendly).
+2024-11-26 12:59:11.138 +01:00 [INF] Executing ViewResult, running view Index.
+2024-11-26 12:59:11.138 +01:00 [INF] Executed ViewResult - view Index executed in 1.8451ms.
+2024-11-26 12:59:11.139 +01:00 [INF] Executed action friendly.Controllers.HomeController.Index (friendly) in 2.3374ms
+2024-11-26 12:59:11.139 +01:00 [INF] Executed endpoint 'friendly.Controllers.HomeController.Index (friendly)'
+2024-11-26 12:59:11.139 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/ - 200 null text/html; charset=utf-8 3.1022ms
+2024-11-26 12:59:11.141 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:59:11.141 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:59:11.141 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:59:11.141 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.3354ms
+2024-11-26 12:59:11.141 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:59:11.141 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.4407ms
+2024-11-26 12:59:11.141 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.3527ms
+2024-11-26 12:59:11.141 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:59:11.141 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:59:11.539 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Table - null null
+2024-11-26 12:59:11.539 +01:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-11-26 12:59:11.539 +01:00 [INF] Route matched with {action = "Table", controller = "Post", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Table() on controller friendly.Controllers.PostController (friendly).
+2024-11-26 12:59:11.541 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+ORDER BY "p"."PostDate" DESC
+2024-11-26 12:59:11.541 +01:00 [INF] Executing ViewResult, running view Table.
+2024-11-26 12:59:11.543 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:59:11.543 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:59:11.544 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:59:11.545 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:59:11.546 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:59:11.547 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:59:11.548 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:59:11.548 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:59:11.549 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:59:11.549 +01:00 [INF] Executed ViewResult - view Table executed in 8.1188ms.
+2024-11-26 12:59:11.550 +01:00 [INF] Executed action friendly.Controllers.PostController.Table (friendly) in 10.0823ms
+2024-11-26 12:59:11.550 +01:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-11-26 12:59:11.550 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Table - 200 null text/html; charset=utf-8 10.8407ms
+2024-11-26 12:59:11.551 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:59:11.551 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:59:11.551 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:59:11.551 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.2092ms
+2024-11-26 12:59:11.551 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.1153ms
+2024-11-26 12:59:11.551 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.1831ms
+2024-11-26 12:59:11.551 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:59:11.551 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:59:11.551 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:59:11.600 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=3 - null null
+2024-11-26 12:59:11.600 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=1 - null null
+2024-11-26 12:59:11.600 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=2 - null null
+2024-11-26 12:59:11.600 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:59:11.600 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:59:11.600 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:59:11.600 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:59:11.600 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:59:11.600 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:59:11.600 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=2 - 401 0 null 0.3697ms
+2024-11-26 12:59:11.600 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=1 - 401 0 null 0.3712ms
+2024-11-26 12:59:11.600 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=3 - 401 0 null 0.4365ms
+2024-11-26 12:59:11.875 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/User/Table - null null
+2024-11-26 12:59:11.876 +01:00 [INF] Executing endpoint 'friendly.Controllers.UserController.Table (friendly)'
+2024-11-26 12:59:11.876 +01:00 [INF] Route matched with {action = "Table", controller = "User", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Table() on controller friendly.Controllers.UserController (friendly).
+2024-11-26 12:59:11.877 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+2024-11-26 12:59:11.877 +01:00 [INF] Executing ViewResult, running view Table.
+2024-11-26 12:59:11.878 +01:00 [INF] Executed ViewResult - view Table executed in 0.8505ms.
+2024-11-26 12:59:11.878 +01:00 [INF] Executed action friendly.Controllers.UserController.Table (friendly) in 1.8815ms
+2024-11-26 12:59:11.878 +01:00 [INF] Executed endpoint 'friendly.Controllers.UserController.Table (friendly)'
+2024-11-26 12:59:11.878 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/User/Table - 200 null text/html; charset=utf-8 2.7824ms
+2024-11-26 12:59:11.879 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:59:11.879 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:59:11.879 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.1132ms
+2024-11-26 12:59:11.879 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:59:11.879 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.1926ms
+2024-11-26 12:59:11.879 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:59:11.885 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:59:11.885 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.094ms
+2024-11-26 12:59:11.885 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:59:12.381 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Post/Table - null null
+2024-11-26 12:59:12.381 +01:00 [INF] Executing endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-11-26 12:59:12.381 +01:00 [INF] Route matched with {action = "Table", controller = "Post", page = "", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Table() on controller friendly.Controllers.PostController (friendly).
+2024-11-26 12:59:12.383 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "p"."PostId", "p"."Caption", "p"."PostDate", "p"."PostImagePath", "p"."UserId"
+FROM "Posts" AS "p"
+ORDER BY "p"."PostDate" DESC
+2024-11-26 12:59:12.383 +01:00 [INF] Executing ViewResult, running view Table.
+2024-11-26 12:59:12.384 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:59:12.384 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:59:12.385 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:59:12.386 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:59:12.388 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:59:12.388 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:59:12.390 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 36)], CommandType='"Text"', CommandTimeout='30']
+SELECT "a"."Id", "a"."AccessFailedCount", "a"."ConcurrencyStamp", "a"."Email", "a"."EmailConfirmed", "a"."FirstName", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."ProfileImageUrl", "a"."SecurityStamp", "a"."TwoFactorEnabled", "a"."UserName"
+FROM "AspNetUsers" AS "a"
+WHERE "a"."Id" = @__p_0
+LIMIT 1
+2024-11-26 12:59:12.391 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "l"."LikeId", "l"."PostId", "l"."UserId"
+FROM "Likes" AS "l"
+WHERE "l"."PostId" = @__p_0
+2024-11-26 12:59:12.392 +01:00 [INF] Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT "c"."CommentId", "c"."CommentDate", "c"."CommentText", "c"."PostId", "c"."UserId"
+FROM "Comments" AS "c"
+WHERE "c"."PostId" = @__p_0
+2024-11-26 12:59:12.392 +01:00 [INF] Executed ViewResult - view Table executed in 9.4624ms.
+2024-11-26 12:59:12.393 +01:00 [INF] Executed action friendly.Controllers.PostController.Table (friendly) in 11.1785ms
+2024-11-26 12:59:12.393 +01:00 [INF] Executed endpoint 'friendly.Controllers.PostController.Table (friendly)'
+2024-11-26 12:59:12.393 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Post/Table - 200 null text/html; charset=utf-8 12.0097ms
+2024-11-26 12:59:12.394 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/css/site.css - null null
+2024-11-26 12:59:12.394 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - null null
+2024-11-26 12:59:12.394 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - null null
+2024-11-26 12:59:12.394 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validate/jquery.validate.js - 404 0 null 0.1465ms
+2024-11-26 12:59:12.394 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validate/jquery.validate.js, Response status code: 404
+2024-11-26 12:59:12.394 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/css/site.css - 404 0 null 0.2285ms
+2024-11-26 12:59:12.394 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/css/site.css, Response status code: 404
+2024-11-26 12:59:12.394 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js - 404 0 null 0.091ms
+2024-11-26 12:59:12.394 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5127/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js, Response status code: 404
+2024-11-26 12:59:12.426 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=1 - null null
+2024-11-26 12:59:12.427 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=2 - null null
+2024-11-26 12:59:12.427 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:59:12.427 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:59:12.427 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=2 - 401 0 null 0.4524ms
+2024-11-26 12:59:12.427 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:59:12.428 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:59:12.428 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=1 - 401 0 null 1.9176ms
+2024-11-26 12:59:12.428 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=3 - null null
+2024-11-26 12:59:12.428 +01:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2024-11-26 12:59:12.428 +01:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2024-11-26 12:59:12.429 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5127/Like/GetLikesCount?postId=3 - 401 0 null 0.4209ms

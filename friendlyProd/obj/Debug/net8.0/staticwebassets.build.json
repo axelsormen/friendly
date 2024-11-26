@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "EX1LdavmYyjQ2/EdiolT+DYjsSGtsZK9JEoz0MuLxSc=",
+  "Hash": "yDonSA2xwbqggr9O+YzeI1V0yf2AP9UnVzaBdBYLV+Q=",
   "Source": "friendly",
   "BasePath": "_content/friendly",
   "Mode": "Default",
@@ -1497,6 +1497,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/uploads/10ba8644-d28f-43bf-ba8b-bd633d1447ee_profileimage2.jpeg"
+    },
+    {
+      "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/150b3f12-1c70-4781-9504-71e5f0fd10f3_Terminal.png",
+      "SourceId": "friendly",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/",
+      "BasePath": "_content/friendly",
+      "RelativePath": "uploads/150b3f12-1c70-4781-9504-71e5f0fd10f3_Terminal.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/uploads/150b3f12-1c70-4781-9504-71e5f0fd10f3_Terminal.png"
     },
     {
       "Identity": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/1f2afbfa-befd-4e00-9493-bc8e184fa61e_profileimage2.jpeg",
