@@ -6,48 +6,55 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="row gx-5">
+    <!-- User profile section -->
     <div class="col-4 text-center">
+        <!-- Display user's profile image if available -->
         @if (!string.IsNullOrEmpty(Model.User?.ProfileImageUrl))
         {
             <img alt="@Model.User?.UserName profile image" 
                 src="@Model.User?.ProfileImageUrl" 
                 class="img-fluid rounded-circle mb-3" 
-                style="width: 200px; height: 200px; object-fit: cover;" />
+                style="width: 200px; height: 200px; object-fit: cover;" /> <!-- Display user's profile image -->   
         }
         else
         {
             <img alt="No Profile Image" 
                 src="/uploads/profile-images/defaultprofileimage.jpg" 
                 class="img-fluid rounded-circle mb-3" 
-                style="width: 200px; height: 200px; object-fit: cover;" />
+                style="width: 200px; height: 200px; object-fit: cover;" /> <!-- Display a default profile image -->
         }
-        <h4>@Model.User?.UserName</h4> <!-- Username below the profile picture -->
+
+        <!-- Display the user's username -->
+        <h4>@Model.User?.UserName</h4>
 
         <!-- Start of the user details table -->
         <table class="table table-bordered">
+            <!-- Name row: Displays first name and last name if available -->
             <tr>
                 <th>Name</th>
-                    @if (!string.IsNullOrEmpty(Model.User?.FirstName) && !string.IsNullOrEmpty(Model.User?.LastName))
-                    {
-                        <td>@Model.User?.FirstName @Model.User?.LastName</td>
-                    }
-                    else if(!string.IsNullOrEmpty(Model.User?.FirstName))
-                    {
-                        <td>@Model.User?.FirstName</td>
-                    }
-                    else if(!string.IsNullOrEmpty(Model.User?.LastName))
-                    {
-                        <td>@Model.User?.LastName</td>
-                    }
-                    else
-                    {
-                        <td><i>Unknown</i></td>
-                    }
+                @if (!string.IsNullOrEmpty(Model.User?.FirstName) && !string.IsNullOrEmpty(Model.User?.LastName))
+                {
+                    <td>@Model.User?.FirstName @Model.User?.LastName</td>
+                }
+                else if(!string.IsNullOrEmpty(Model.User?.FirstName))
+                {
+                    <td>@Model.User?.FirstName</td>
+                }
+                else if(!string.IsNullOrEmpty(Model.User?.LastName))
+                {
+                    <td>@Model.User?.LastName</td>
+                }
+                else
+                {
+                    <td><i>Unknown</i></td>
+                }
             </tr>
+            <!-- Email row -->
             <tr>
                 <th>Email</th>
                 <td>@Model.User?.Email</td>
             </tr>
+            <!-- Phone number row: If missing, show 'Missing' -->
             <tr>
                 <th>Phone Number</th>
                 <td>
@@ -62,9 +69,9 @@
                 </td>
             </tr>
         </table>
-        <!-- End of the user details table -->
 
         <div>
+            <!-- Navigation buttons to go back to Table View or Grid View -->
             <p>
                 <a href="/Post/Table" class="btn btn-secondary">Back to Table View</a>
                 <a href="/Post/Grid" class="btn btn-secondary">Back to Grid View</a>
@@ -72,17 +79,22 @@
         </div>
     </div>
 
+    <!-- Posts section -->
     <div class="col-8">
         <div class="row">
+            <!-- Check if user has any posts, display them in a grid -->
             @if (Model.Posts != null && Model.Posts.Any())
             {
                 foreach (var post in Model.Posts)
                 {
                     <div class="col-md-6 mb-4">
                         <div class="card">
+                            <!-- Display the post's image -->
                             <img src="@post.PostImagePath" class="card-img-top" alt="@post.Caption" style="height: auto; object-fit: cover;" />
                             <div class="card-body">
+                                <!-- Display post's caption -->
                                 <p class="card-text">@post.Caption</p>
+                                <!-- Display post's date -->
                                 <p><small class="text-muted">@post.PostDate</small></p>
                             </div>
                         </div>

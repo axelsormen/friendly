@@ -1,12 +1,15 @@
-@model friendly.ViewModels.PostsViewModel // Ensure this is correct for both Table and Grid views
+@model friendly.ViewModels.PostsViewModel
 @{
     ViewData["Title"] = "Posts";
 }
 
-<h1>@ViewData["Title"] (@Model.CurrentViewName View)</h1>
+<h1>@ViewData["Title"] (@Model.CurrentViewName View)</h1> <!-- Display the page title and the current view mode -->
+
 <a href="/Post/Grid" class="btn btn-primary me-2">Grid View</a>
+
 <p>
     <a class="btn btn-secondary" asp-controller="Post" asp-action="Create">Create New Post</a>
 </p>
 
+<!-- Partial view that list all posts in table format -->
 <partial name="_PostTable" model="Model.Posts" />

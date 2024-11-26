@@ -3,11 +3,14 @@
     ViewData["Title"] = "Posts";
 }
 
-<h1>@ViewData["Title"] (@Model.CurrentViewName View)</h1>
+<h1>@ViewData["Title"] (@Model.CurrentViewName View)</h1> <!-- Display the title and the current view name -->
+
 <a href="/Post/Table" class="btn btn-primary">Table View</a>
+
 <p><a class="btn btn-secondary" asp-controller="Post" asp-action="Create">Create New Post</a></p>
 
 <div class="row">
+    <!-- Loop through all the posts and display each -->
     @foreach (var post in Model.Posts)
     {
         <partial name="_PostCard" model="post" />

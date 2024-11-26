@@ -10,12 +10,12 @@
     <div class="form-group">
         <label>Upload Image</label><span class="text-danger">*</span>
         <input type="file" name="imageFile" class="form-control" />  <!-- File input for image -->
-        <span asp-validation-for="PostImagePath" class="text-danger"></span> <!-- For validation -->
+        <span asp-validation-for="PostImagePath" class="text-danger"></span> <!-- Validation -->
     </div>
     <div class="form-group">
         <label asp-for="Caption">Enter Caption</label><span class="text-danger">*</span>
-        <input asp-for="Caption" class="form-control" />
-        <span asp-validation-for="Caption" class="text-danger"></span>
+        <input asp-for="Caption" class="form-control" /> <!-- Caption input for image -->
+        <span asp-validation-for="Caption" class="text-danger"></span> <!-- Validation -->
     </div>    
     <button type="submit" class="btn btn-primary">Create</button>
     <a asp-action="Table" class="btn btn-secondary">Back to Table View</a>
