@@ -3,38 +3,46 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <!-- Card structure -->
+            <!-- Card structure for displaying the comment editing form -->
             <div class="card">
                 <div class="card-body text-center">
                     <h3 class="card-title">Edit Comment</h3>
                     <hr />
 
+                    <!-- Display the associated post details if the Post is not null -->
                     @if (Model.Post != null)
                     {
                         <div class="mb-4">
+                            <!-- Display the post image with responsive styling -->
                             <img src="@Model.Post.PostImagePath" alt="Post Image" class="img-fluid" style="max-height: 300px; object-fit: cover; width: 100%;" />
                         </div>
                         <div>
+                            <!-- Display the caption of the associated post -->
                             <h5>@Model.Post.Caption</h5>
                         </div>
                     }
                     <hr />
 
-                    <!-- Edit comment form -->
                     <form asp-action="Update" method="post">
+                        <!-- Hidden input fields to pass the CommentId and PostId for form submission -->
                         <input type="hidden" asp-for="CommentId" />
                         <input type="hidden" asp-for="PostId" /> 
 
+                        <!-- Form group for the comment text area -->
                         <div class="form-group">
                             <label for="CommentText">Update your comment</label>
+                            <!-- Text area for entering the updated comment text -->
                             <textarea asp-for="CommentText" class="form-control" placeholder="Enter new comment" rows="4"></textarea>
                             <span asp-validation-for="CommentText" class="text-danger"></span> <!-- Validation -->
                         </div>
 
                         <hr />
 
+                        <!-- Action buttons for saving changes or cancelling the edit -->
                         <div class="d-flex justify-content-between">
+                            <!-- Submit button to save the updated comment -->
                             <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <!-- Cancel button that redirects to the Post table page -->
                             <a asp-controller="Post" asp-action="Table" asp-route-id="@Model.PostId" class="btn btn-secondary">Cancel</a>
                         </div>
                     </form>

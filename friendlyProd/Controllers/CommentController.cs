@@ -74,6 +74,7 @@ namespace friendly.Controllers
         {
             try
             {
+                // Retrieve the comment by its ID from the repository
                 var comment = await _commentRepository.GetCommentById(id);
                 if (comment == null)
                 {
@@ -81,18 +82,22 @@ namespace friendly.Controllers
                     return NotFound("Comment not found for the CommentId");
                 }
 
+                // Get the current logged-in user using UserManager
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
                     return Unauthorized("User is not logged in.");
                 }
 
+                // Check if the logged-in user is the owner of the comment
                 if (comment.UserId != user.Id)
                 {
-                    return Forbid(); // Ensure only the comment creator can update the comment
+                    // If the user is not the owner, deny access to edit the comment
+                    return Forbid();
                 }
 
-                return View(comment); // Return the comment data for editing
+                // Return the comment data to the view for editing
+                return View(comment); 
             }
             catch (Exception ex)
             {
@@ -107,8 +112,10 @@ namespace friendly.Controllers
         {
             try
             {
+                // Check if the provided model data is valid
                 if (ModelState.IsValid)
                 {
+                    // Retrieve the original comment from the repository using its ID
                     var originalComment = await _commentRepository.GetCommentById(comment.CommentId);
                     if (originalComment == null)
                     {
@@ -116,26 +123,36 @@ namespace friendly.Controllers
                         return NotFound("Original comment not found.");
                     }
 
+                    // Get the current logged-in user
                     var user = await _userManager.GetUserAsync(User);
                     if (user == null)
                     {
+                        // If no user is logged in, return an Unauthorized response
                         return Unauthorized("User is not logged in.");
                     }
 
+                    // Ensure the logged-in user is the owner of the comment
                     if (originalComment.UserId != user.Id)
                     {
-                        return Forbid(); // Ensure only the comment creator can update the comment
+                        // If the user is not the owner, deny access to update the comment
+                        return Forbid();
                     }
 
-                    originalComment.CommentText = comment.CommentText; // Update the comment's text
+                    // Update the original comment's text with the new comment text
+                    originalComment.CommentText = comment.CommentText;
 
+                    // Call the repository to update the comment in the database
                     bool returnOk = await _commentRepository.Update(originalComment);
                     if (returnOk)
+                    {
                         return RedirectToAction("Table", "Post"); // Redirect back to Table if the update is successful
-                        _logger.LogError("[CommentController] Comment update failed for CommentId {CommentId:0000}.", comment.CommentId);
+                    }
+
+                    _logger.LogError("[CommentController] Comment update failed for CommentId {CommentId:0000}.", comment.CommentId);
                 }
 
-                return View(comment); // Return the view if update fails
+                // Return the comment data to the view in case the update failed
+                return View(comment);
             }
             catch (Exception ex)
             {
