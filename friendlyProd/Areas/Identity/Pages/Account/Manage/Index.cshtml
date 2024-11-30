@@ -48,6 +48,9 @@
         <!-- Deletion of user -->
         <form asp-page-handler="DeleteConfirmed" method="post">
             <div class="mt-3">
+                <div class="alert alert-warning text-center">
+                    <strong>Warning:</strong> Deleting your account is permanent and cannot be undone.
+                </div>
                 <button id="delete-profile-button" type="submit" class="w-100 btn btn-lg btn-danger">Delete user</button>
             </div>
         </form>

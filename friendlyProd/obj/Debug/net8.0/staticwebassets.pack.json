@@ -85,6 +85,10 @@
       "PackagePath": "staticwebassets/uploads/2b2a3cfd-a28b-4bcd-a480-6679e4935431_pizza.jpg"
     },
     {
+      "Id": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/2bfd88e0-6a8d-49c5-a528-e12c0cd5db9f_fall.jpeg",
+      "PackagePath": "staticwebassets/uploads/2bfd88e0-6a8d-49c5-a528-e12c0cd5db9f_fall.jpeg"
+    },
+    {
       "Id": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/30d92246-2897-4d41-8214-b42499798864_pizza.jpg",
       "PackagePath": "staticwebassets/uploads/30d92246-2897-4d41-8214-b42499798864_pizza.jpg"
     },
@@ -167,6 +171,10 @@
     {
       "Id": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/76b080f0-12d0-42eb-9d08-d406c7dd2fba_Terminal.png",
       "PackagePath": "staticwebassets/uploads/76b080f0-12d0-42eb-9d08-d406c7dd2fba_Terminal.png"
+    },
+    {
+      "Id": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/7f8f60ae-aaee-41d1-b1e5-2275e64eb01d_beach.jpeg",
+      "PackagePath": "staticwebassets/uploads/7f8f60ae-aaee-41d1-b1e5-2275e64eb01d_beach.jpeg"
     },
     {
       "Id": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/86913c58-0edc-4c5e-bb71-7e6fbca268d9_pizza.jpg",
@@ -307,6 +315,10 @@
     {
       "Id": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/profile-images/73123ff8-f5c5-4db9-8daf-9523cbd2e5ea_profileimage2.jpeg",
       "PackagePath": "staticwebassets/uploads/profile-images/73123ff8-f5c5-4db9-8daf-9523cbd2e5ea_profileimage2.jpeg"
+    },
+    {
+      "Id": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/profile-images/7c0123ab-f1aa-475e-bd84-378e55a5403f_beach.jpeg",
+      "PackagePath": "staticwebassets/uploads/profile-images/7c0123ab-f1aa-475e-bd84-378e55a5403f_beach.jpeg"
     },
     {
       "Id": "/Users/axel/Documents/Skole/friendly/friendlyProd/wwwroot/uploads/profile-images/7c12cb57-5844-47bd-95b4-9fb5349f9e1c_pizza.jpg",
