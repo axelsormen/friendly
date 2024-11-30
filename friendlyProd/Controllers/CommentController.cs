@@ -69,6 +69,82 @@ namespace friendly.Controllers
         }
 
         [HttpGet]
+        [Authorize] // Only authorized users can update a comment
+        public async Task<IActionResult> Update(int id)
+        {
+            try
+            {
+                var comment = await _commentRepository.GetCommentById(id);
+                if (comment == null)
+                {
+                    _logger.LogError("[CommentController] Comment not found when updating the CommentId {CommentId:0000}", id);
+                    return NotFound("Comment not found for the CommentId");
+                }
+
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return Unauthorized("User is not logged in.");
+                }
+
+                if (comment.UserId != user.Id)
+                {
+                    return Forbid(); // Ensure only the comment creator can update the comment
+                }
+
+                return View(comment); // Return the comment data for editing
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[CommentController] Error occurred while retrieving the comment for update.");
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        [HttpPost]
+        [Authorize] // Only authorized users can update a comment
+        public async Task<IActionResult> Update(Comment comment)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var originalComment = await _commentRepository.GetCommentById(comment.CommentId);
+                    if (originalComment == null)
+                    {
+                        _logger.LogError("[CommentController] Original comment not found for update, CommentId: {CommentId:0000}", comment.CommentId);
+                        return NotFound("Original comment not found.");
+                    }
+
+                    var user = await _userManager.GetUserAsync(User);
+                    if (user == null)
+                    {
+                        return Unauthorized("User is not logged in.");
+                    }
+
+                    if (originalComment.UserId != user.Id)
+                    {
+                        return Forbid(); // Ensure only the comment creator can update the comment
+                    }
+
+                    originalComment.CommentText = comment.CommentText; // Update the comment's text
+
+                    bool returnOk = await _commentRepository.Update(originalComment);
+                    if (returnOk)
+                        return RedirectToAction("Table", "Post"); // Redirect back to Table if the update is successful
+                        _logger.LogError("[CommentController] Comment update failed for CommentId {CommentId:0000}.", comment.CommentId);
+                }
+
+                return View(comment); // Return the view if update fails
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[CommentController] Error occurred while updating the comment.");
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        [HttpGet]
         [Authorize]  // Only authorized users can attempt to delete comments
         public async Task<IActionResult> Delete(int id)
         {

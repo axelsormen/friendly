@@ -66,6 +66,34 @@ namespace friendly.DAL
             }
         }
 
+        // Updates a comment by its ID
+        public async Task<bool> Update(Comment comment)
+        {
+            try
+            {
+                // Asynchronously finds the comment by its ID
+                var existingComment = await _db.Comments.FindAsync(comment.CommentId);
+
+                if (existingComment == null)
+                {
+                    _logger.LogError("[CommentRepository] comment not found for the CommentId {CommentId:0000}", comment.CommentId);
+                    return false;
+                }
+
+                // Update the comment's properties with the new data
+                existingComment.CommentText = comment.CommentText; // Update other properties if needed
+
+                // Asynchronously save changes to the database
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("[CommentRepository] comment update failed for the CommentId {CommentId:0000}, error message: {e}", comment.CommentId, e.Message);
+                return false;
+            }
+        }
+
         // Deletes a comment by its ID
         public async Task<bool> Delete(int id)
         {
